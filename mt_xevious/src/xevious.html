@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>HTML 5 Xevious no pakuri</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<meta name="apple-mobile-web-app-title" content="Xevious">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<link rel="apple-touch-icon" href="./images/homeicon.jpg">
+</head>
+<body>
+
+
+<section id="game_wrapper" class="on">
+<canvas id="game" width="510" height="720"></canvas>
+</section>
+<section id="game_start_loading">
+<div class="text">Now Loading...
+<p class="rate"></p>
+</div>
+<div class="range"></div>
+</section>
+
+<section id="sp_controller" class="on">
+<div id="sp_controller_inner">
+
+<div class="sp_controller_main">
+<div class="sp_controller_main_center"></div>
+</div>
+<!-- /.sp_controller_main -->
+
+<div class="sp_controller_bt r"></div>
+<div class="sp_controller_bt p"></div>
+<div class="sp_controller_bt s"></div>
+<div class="sp_controller_bt b"></div>
+<div class="sp_controller_bt a"></div>
+</div>
+</section>
+<!-- /#sp_controller -->
+
+<section id="sp_portraitmode">
+<div class="_inner">画面を縦にして
+<br/>ゲームをしてください</div>
+<div id="device"></div>
+</section>
+<!-- /#sp_portraitmode -->
+
+<input type="text" id="msg_input" style="width:200px;" />
+<button>語る</button>
+<div id="msg"></div>
+
+
+<!-- <script src="/socket.io/socket.io.js"></script> -->
+<script>
+//  var socketio = io.connect('http://localhost:1234');
+// // socketio = io({ path: '/public/git/Game_xevious/mt_xevious/socket.io/' });
+//      socketio.on("connected", function (name) {});
+//     socketio.on("publish", function (data) {
+//         addMessage(data.value);
+//     });
+//     socketio.on("disconnect", function () {});
+
+//     // 2.イベントに絡ませる関数の定義
+//     function start(name) {
+//         socketio.emit("connected", name);
+//     }
+
+//     function publishMessage() {
+//         var textInput = document.getElementById('msg_input');
+//         var msg = "[" + myName + "] " + textInput.value;
+//         socketio.emit("publish", {
+//             value: msg
+//         });
+//         textInput.value = '';
+//     }
+
+//     function addMessage(msg) {
+//         var domMeg = document.createElement('div');
+//         domMeg.innerHTML = new Date().toLocaleTimeString() + ' ' + msg;
+//         msgArea.appendChild(domMeg);
+//     }
+
+//     // 3.開始処理
+//     var msgArea = document.getElementById("msg");
+//     var myName = Math.floor(Math.random() * 100) + "さん";
+//     addMessage("貴方は" + myName + "として入室しました");
+//     start(myName);
+</script>
+<script src="./xevious_main.js?date=20180601"></script>
+
+
+</body>
+</html>

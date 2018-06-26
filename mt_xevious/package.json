@@ -1,0 +1,31 @@
+{
+  "name": "mt_xevious",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --open && webpack --watch",
+    "build": "cp ./src/*.json ./dist/ && webpack && node ./imagemin.js && html-dist --config html-dist.config.js --input ./src/xevious.html > ./dist/xevious.html",
+    "watch": "webpack --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "css-loader": "^0.28.11",
+    "html-dist": "^0.3.2",
+    "http": "0.0.0",
+    "imagemin": "^5.3.1",
+    "imagemin-pngquant": "^5.1.0",
+    "path": "^0.12.7",
+    "socket.io": "^2.1.1",
+    "style-loader": "^0.21.0",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.5.1",
+    "webpack": "^4.12.0",
+    "webpack-cli": "^3.0.6",
+    "webpack-dev-server": "^3.1.4"
+  }
+}
