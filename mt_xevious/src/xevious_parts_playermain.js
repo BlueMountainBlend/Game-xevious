@@ -53,7 +53,7 @@ export const _PARTS_PLAYERMAIN={
 			if(!_o.isalive()){continue;}
 			return {
 				x: _o.getPlayerCenterPosition()._x,
-				y: _o.height-15
+				y: _o.y+_o.height-15
 			}
 		}
 	},
@@ -89,24 +89,6 @@ export const _PARTS_PLAYERMAIN={
 			_this._players_obj[_i].move(_p);
 		}
 	},
-	_draw_option(){
-		//オプションの移動・表示処理
-		let _this=this;
-		//オプションのアニメーションカウント設定
-		_this._set_option_count();
-		for(let _i=0;_i<_this._option_max;_i++){
-			if(_this._players_obj.isalive()){_this._option_obj[_i].move(10*(_i+1));}
-			_this._option_obj[_i].setDrawImage();
-		}
-	},
-	_get_option_scale(){
-		//アニメーションカウントより、
-		//オプションアニメーション定義から
-		//オプションのスケールを取得
-		let _this=this;
-		return _this._option_ani_def[_this._get_option_count()].scale;
-	},
-
 	_move_shots(){
 		//ショット移動
 		let _this = this;
@@ -616,7 +598,6 @@ class GameObject_SHOTS_MISSILE
 	move(){
 		let _this=this;
 		let _p=_this.player;
-		if(!_p.isalive()){return;}
 		if(_p.x===undefined){return;}
 		//プレーヤーの中心座標取得
 		let _pl = _p.getPlayerCenterPosition();

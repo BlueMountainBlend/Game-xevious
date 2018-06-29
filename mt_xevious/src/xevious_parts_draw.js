@@ -27,13 +27,10 @@ const _is_enemies_collision = () => {
 }
 
 const _is_enemies_shot_collision = () => {
-	for (let _i=0; _i<_XES._PARTS_ENEMYSHOT._enemyshot.length; _i++){
-		let _e = _XES._PARTS_ENEMYSHOT._enemyshot[_i];
+	_XES._PARTS_ENEMYSHOT._enemyshot.map((_o,_i,_ar)=>{
 		//非表示・かつ生存してない場合は、要素から外す
-		if(!_e.isshow()){
-			_XES._PARTS_ENEMYSHOT._enemyshot.splice(_i, 1);
-		}
-	}
+		if (!_o.isshow()) {_ar.splice(_i, 1);}
+	});
 	_XPPM._PARTS_PLAYERMAIN._enemy_shot_collision(_XES._PARTS_ENEMYSHOT._enemyshot);
 }
 
@@ -60,6 +57,7 @@ export const _DRAW = () => {
 
 		//各オブジェクト最適化
 		_XPO._PARTS_COLLISION._optimized_collapsed();
+		_XPO._PARTS_COLLISION._optimized_collision();
 		_XPE._PARTS_ENEMIESMAIN._optimized_enemies();
 
 		//爆発後の移動・表示
@@ -87,9 +85,16 @@ export const _DRAW = () => {
 
 		_XPO._PARTS_OTHERS._draw_score();
 
+		_DRAW_GAMECLEAR();
 		_DRAW_PLAYER_COLLAPES();
 	}
 	_DRAW_SETINTERVAL = window.requestAnimationFrame(_loop);
+}
+export const _DRAW_GAMECLEAR = () => {
+	if(!_XPE._PARTS_ENEMIESMAIN._get_enemies()){return;}
+	if (_IS_GAMEOVER()){return;}
+	_GAME_COMMON._setDrawText('GAME CLEAR', 'center', 300, 0.5);
+	_GAME_COMMON._setDrawText('PRESS R TO RESTART', 'center', 400, 0.3);
 }
 export const _DRAW_GAMESTART = () =>{
 	// _XPE._PARTS_ENEMIESMAIN._reset();
@@ -203,21 +208,14 @@ const _DRAW_GAMEOVER=()=>{
 		_s,
 		"center",
 		(_GAME_COMMON._canvas.height / 2) - (60 / 2) - 40,
-		0.4);
+		0.5);
 
-	_s='Press R to Restart';
+	_s='PRESS R TO RESTART';
 	_GAME_COMMON._setDrawText(
 			_s,
 			"center",
 			(_GAME_COMMON._canvas.height / 2) + 30,
-			0.2
-		);
-	_s='Press S to Change to Another Stage';
-	_GAME_COMMON._setDrawText(
-			_s,
-			"center",
-			(_GAME_COMMON._canvas.height / 2) + 60,
-			0.2
+			0.3
 		);
 
 }// _DRAW_GAMEOVER

@@ -22,13 +22,28 @@ export const _PARTS_ENEMYSHOT={
 		let _x=_o.x;
 		let _y=_o.y;
 		if(_x===undefined||_y===undefined){return;}
-		if(_e.getEnemyCenterPosition()._y>_o.y){return;}
+		if(_e.getEnemyCenterPosition()._y>_y){return;}
 		this._enemyshot.push(new GameObject_ENEMYSHOT(
 			{
 				x: _e.getEnemyCenterPosition()._x,
 				y: _e.getEnemyCenterPosition()._y,
-				tx: _o.x,
-				ty: _o.y
+				tx: _x,
+				ty: _y
+			}
+		))
+	},
+	_set_enemyshot2(_e){
+		let _o = _XPPM._PARTS_PLAYERMAIN._get_players_location();
+		if(_o===undefined){return;}
+		let _x=_o.x;
+		let _y=_o.y;
+		if(_x===undefined||_y===undefined){return;}
+		this._enemyshot.push(new GameObject_ENEMYSHOT(
+			{
+				x: _e.x,
+				y: _e.y,
+				tx: _x,
+				ty: _y
 			}
 		))
 	},

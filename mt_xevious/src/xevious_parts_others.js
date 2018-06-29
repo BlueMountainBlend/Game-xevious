@@ -40,13 +40,13 @@ export class xevious_background{
 		_this._posX_def = [768, 512, 256, 0];
 		_this._posX_c = 0;
 		_this._posX = _this._posX_def[_this._posX_c];
-		_this._posY = 1648;
+		_this._posY = 2500;
 	}
 	init(){
 		let _this = this;
 		_this._posX_c = 0;
 		_this._posX = _this._posX_def[_this._posX_c];
-		_this._posY = 1648;
+		_this._posY = 2500;
 	}
 	setDrawImage(){
 		let _this=this;
@@ -64,10 +64,9 @@ export class xevious_background{
 		let _this=this;
 
 		_this._posY -= _XMP._MAP._background_speed;
-//		console.log('back:' + _this._posY);
 		_this._posX_c = (_this._posY <= 0) ? _this._posX_c - 1 : _this._posX_c;
 		_this._posX_c = (_this._posX_c < 0) ? _this._posX_def.length - 1 : _this._posX_c;
-		_this._posY = (_this._posY <= 0) ? 1648 : _this._posY;
+		_this._posY = (_this._posY <= 0) ? 2500 : _this._posY;
 		_this._posX = _this._posX_def[_this._posX_c];
 	}
 }
@@ -134,7 +133,15 @@ const def_col={
 		height:60,
 		intv:4,
 		imgPos:[0,60,120,180,240,300]
+	},
+	't3':{//
+		img:_XC._CANVAS_IMGS.xevious_enemies_collapes3.obj,
+		width:50,
+		height:50,
+		intv:2,
+		imgPos:[0,50,100,150,200,250,300,350,400,450,500,550]
 	}
+
 
 };
 export const _PARTS_COLLISION={
@@ -159,53 +166,43 @@ export const _PARTS_COLLISION={
 		let _this = this;
 		_this._collapsed_field.push(new xevious_collapsed(_p));
 	},
+	_optimized_collision() {
+		let _this=this;
+		_this._o.map((_o,_i,_ar)=>{
+			if(!_o._status){_ar.splice(_i,1);}
+		});
+	},
 	_move_collision(){
 		//爆発アニメーションの移動
 		let _this=this;
-		for(let _i=0;_i<_this._o.length;_i++){
-			if(!_this._o[_i]._status){_this._o.splice(_i,1);}
-		}
-
-		for(let _i=0;_i<_this._o.length;_i++){
-			_this._o[_i].move();
-		}
+		_this._o.map((_obj)=>{_obj.move();});
 	},
 	_draw_collision(){
 		//爆発アニメーションの表示
 		let _this=this;
-		for (let _i = 0; _i < _this._o.length; _i++) {
-			_this._o[_i].setDrawImage();
-		}
+		_this._o.map((_obj)=>{_obj.setDrawImage();});
 	},
 	_optimized_collapsed() {
 		let _this=this;
-		for(let _i=0;_i<_this._collapsed_field.length;_i++){
-			if(!_this._collapsed_field[_i]._status){_this._collapsed_field.splice(_i,1);}
-		}
-		for(let _i=0;_i<_this._collapsed_fly.length;_i++){
-			if(!_this._collapsed_fly[_i]._status){_this._collapsed_fly.splice(_i,1);}
-		}
+		_this._collapsed_field.map((_o,_i,_ar)=>{
+			if(!_o._status){_ar.splice(_i,1);}
+		});
+		_this._collapsed_fly.map((_o,_i,_ar)=>{
+			if(!_o._status){_ar.splice(_i,1);}
+		});
 	},
 	_move_collapsed() {
 		let _this=this;
-		for (let _i = 0; _i < _this._collapsed_field.length; _i++) {
-			_this._collapsed_field[_i].move();
-		}
-		for(let _i=0;_i<_this._collapsed_fly.length;_i++){
-			_this._collapsed_fly[_i].move();
-		}
+		_this._collapsed_field.map((_o)=>{_o.move();});
+		_this._collapsed_fly.map((_o)=>{_o.move();});
 	},
 	_draw_collapsed_field() {
 		let _this = this;
-		for (let _i = 0; _i < _this._collapsed_field.length; _i++) {
-			_this._collapsed_field[_i].setDrawImage();
-		}
+		_this._collapsed_field.map((_o)=>{_o.setDrawImage();});
 	},
 	_draw_collapsed_fly() {
 		let _this = this;
-		for (let _i = 0; _i < _this._collapsed_fly.length; _i++) {
-			_this._collapsed_fly[_i].setDrawImage();
-		}
+		_this._collapsed_fly.map((_o)=>{_o.setDrawImage();});
 	},
 
 };
