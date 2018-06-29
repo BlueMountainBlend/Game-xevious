@@ -54,6 +54,54 @@ export const _CANVAS_IMGS={
 		rate: 1.00,
 		obj: new Image()
 	},
+	'xevious_enemy_logram': {
+		src: 'images/xevious_enemy_logram.png',
+		rate: 1.00,
+		obj: new Image()
+	},
+	'xevious_enemy_zakato': {
+		src: 'images/xevious_enemy_zakato.png',
+		rate: 1.00,
+		obj: new Image()
+	},
+	'xevious_enemy_derota': {
+		src: 'images/xevious_enemy_derota.png',
+		rate: 1.00,
+		obj: new Image()
+	},
+
+
+	'xevious_enemy_andorgenesis': {
+		src: 'images/xevious_enemy_andorgenesis.png',
+		rate: 1.00,
+		obj: new Image()
+	},
+	'xevious_enemy_andorgenesis_child0': {
+		src: 'images/xevious_enemy_andorgenesis_child0.png',
+		rate: 1.00,
+		obj: new Image()
+	},
+	'xevious_enemy_andorgenesis_child1': {
+		src: 'images/xevious_enemy_andorgenesis_child1.png',
+		rate: 1.00,
+		obj: new Image()
+	},
+	'xevious_enemy_andorgenesis_child2': {
+		src: 'images/xevious_enemy_andorgenesis_child2.png',
+		rate: 1.00,
+		obj: new Image()
+	},
+	'xevious_enemy_andorgenesis_child3': {
+		src: 'images/xevious_enemy_andorgenesis_child3.png',
+		rate: 1.00,
+		obj: new Image()
+	},
+	'xevious_enemy_andorgenesis_child4': {
+		src: 'images/xevious_enemy_andorgenesis_child4.png',
+		rate: 1.00,
+		obj: new Image()
+	},
+
 
 	//COLLISION
 	'xevious_solvalou_collapes': {
@@ -68,6 +116,16 @@ export const _CANVAS_IMGS={
 	},
 	'xevious_enemies_collapes2': {
 		src: 'images/xevious_enemies_collapes2.png',
+		rate: 1.00,
+		obj: new Image()
+	},
+	'xevious_enemies_collapes3': {
+		src: 'images/xevious_enemies_collapes3.png',
+		rate: 1.00,
+		obj: new Image()
+	},
+	'xevious_enemies_collapes0': {
+		src: 'images/xevious_enemies_collapes0.png',
 		rate: 1.00,
 		obj: new Image()
 	},

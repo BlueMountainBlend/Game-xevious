@@ -15,15 +15,9 @@ import * as _XPPM from './xevious_parts_playermain';
 export const _PARTS_ENEMIESMAIN={
 	_enemies_field:new Array(),
 	_enemies_fly:new Array(),
+	_shot_rate:0.005,
 	_init(){//暫定
 		let _this = this;
-		// _this._enemies.push(new ENEMY_TOROID({x:300,y:10}));
-		// _this._enemies.push(new ENEMY_BACURA({x:20,y:10}));
-		// _this._enemies.push(new ENEMY_BACURA({x:100,y:40}));
-		// _this._enemies.push(new ENEMY_BACURA({x:350,y:40}));
-		// _this._enemies.push(new ENEMY_BARRA({x:200,y:10}));
-		// _this._enemies.push(new ENEMY_BARRA({x:400,y:10}));
-		// _this._enemies.push(new ENEMY_ZOLBAK({x:300,y:-50}));
 	},
 	_map_def:{
 		'a':{
@@ -46,6 +40,28 @@ export const _PARTS_ENEMIESMAIN={
 			'_st':'',
 			'_getObj':()=>{return new ENEMY_ZOLBAK({})}
 		},
+		'e':{
+			'_gamestart':(_x,_y)=>{_PARTS_ENEMIESMAIN._enemies_field.push(new ENEMY_LOGRAM({x:_x,y:_y}));},
+			'_st':'',
+			'_getObj':()=>{return new ENEMY_LOGRAM({})}
+		},
+		'f':{
+			'_gamestart':(_x,_y)=>{_PARTS_ENEMIESMAIN._enemies_fly.push(new ENEMY_ZAKATO({x:_x,y:_y}));},
+			'_st':'',
+			'_getObj':()=>{return new ENEMY_ZAKATO({})}
+		},
+		'g':{
+			'_gamestart':(_x,_y)=>{_PARTS_ENEMIESMAIN._enemies_fly.push(new ENEMY_DEROTA({x:_x,y:_y}));},
+			'_st':'',
+			'_getObj':()=>{return new ENEMY_DEROTA({})}
+		},
+
+
+		'z':{
+			'_gamestart':(_x,_y)=>{_PARTS_ENEMIESMAIN._enemies_field.push(new ENEMY_ANDORGENESIS({x:_x,y:_y}));},
+			'_st':'',
+			'_getObj':()=>{return new ENEMY_ANDORGENESIS({})}
+		},
 
 	},
 	_reset(){
@@ -53,44 +69,37 @@ export const _PARTS_ENEMIESMAIN={
 		_this._enemies_field = new Array();
 		_this._enemies_fly = new Array();
 	},
+	_get_enemies(){
+		return (this._enemies_field.length + this._enemies_fly.length===0);
+	},
 	_get_array_enemies(){
 		return this._enemies_field.concat(this._enemies_fly);
 	},
 	_optimized_enemies(){
 		let _this = this;
-		for (let _i = 0; _i < _this._enemies_field.length; _i++) {
-			let _e = _this._enemies_field[_i];
+		_this._enemies_field.map((_e, _i, _ar) => {
 			if (!_e.isshow() && !_e.isalive()) {
-				_this._enemies_field.splice(_i, 1);
+				_ar.splice(_i, 1);
 			}
-		}
-		for (let _i = 0; _i < _this._enemies_fly.length; _i++) {
-			let _e = _this._enemies_fly[_i];
+		});
+		_this._enemies_fly.map((_e, _i, _ar) => {
 			if (!_e.isshow() && !_e.isalive()) {
-				_this._enemies_fly.splice(_i, 1);
+				_ar.splice(_i, 1);
 			}
-		}
+		});
 	},
 	_move_enemies(){
 		let _this = this;
-		for (let _i = 0; _i < _this._enemies_field.length; _i++) {
-			_this._enemies_field[_i].move();
-		}
-		for (let _i = 0; _i < _this._enemies_fly.length; _i++) {
-			_this._enemies_fly[_i].move();
-		}
+		_this._enemies_field.map((_e) => {_e.move();});
+		_this._enemies_fly.map((_e) => {_e.move();});
 	},
 	_draw_enemies_field(){
 		let _this = this;
-		for (let _i = 0; _i < _this._enemies_field.length; _i++) {
-			_this._enemies_field[_i].setDrawImage();
-		}
+		_this._enemies_field.map((_e) => {_e.setDrawImage();});
 	},
 	_draw_enemies_fly(){
 		let _this = this;
-		for (let _i = 0; _i < _this._enemies_fly.length; _i++) {
-			_this._enemies_fly[_i].setDrawImage();
-		}
+		_this._enemies_fly.map((_e) => {_e.setDrawImage();});
 	}
 };
 
@@ -224,7 +233,7 @@ class GameObject_ENEMY{
 	shot(){
 		//キャンバス内でショットさせる
 		if(_GAME_COMMON.isCanvasOut(this)){return;}
-		if(Math.random()>=0.01){return;}
+		if(Math.random()>=_PARTS_ENEMIESMAIN._shot_rate){return;}
 		_XES._PARTS_ENEMYSHOT._set_enemyshot(this);
 
 // 		if(Math.random()>=
@@ -509,13 +518,15 @@ export class ENEMY_TOROID extends GameObject_ENEMY {
 		_this.speedx=(()=>{
 			if(_this.turnflag){return _this.speedx;}
 			if(_this.y<100){return _this.speedx;}
+			let _o = _XPPM._PARTS_PLAYERMAIN._get_players_location();
+			if(_o===undefined){return _this.speedx;}
 			if (_this.speedx < 0) {
-				if (_XPPM._PARTS_PLAYERMAIN._players_obj[0].x < _this.x) {
+				if (_o.x < _this.x) {
 					_this.turnflag = true;
 					return _this.speedx * -3;
 				}
 			} else {
-				if (_XPPM._PARTS_PLAYERMAIN._players_obj[0].x > _this.x) {
+				if (_o.x > _this.x) {
 					_this.turnflag = true;
 					return _this.speedx * -3;
 				}
@@ -592,6 +603,56 @@ export class ENEMY_BARRA extends GameObject_ENEMY {
 }
 
 
+export class ENEMY_LOGRAM extends GameObject_ENEMY {
+	constructor(_p){
+		super({
+			img:_p.img||_XC._CANVAS_IMGS.xevious_enemy_logram.obj,
+			x:_p.x,
+			y:_p.y,
+			imgPos:[0],
+			width:30,
+			height:30,
+			aniItv:20,
+			enemy_type:2
+		});
+		let _this=this;
+		_this.getscore = 200; //倒した時のスコア
+		_this.isopen = false;
+		_this.isshot = false;
+
+	}
+	shot(){
+		let _this=this;
+		//キャンバス内でショットさせる
+		if(_GAME_COMMON.isCanvasOut(this)){return;}
+
+		if(!_this.isopen){
+			if(Math.random()>=_PARTS_ENEMIESMAIN._shot_rate){return;}
+			_this.imgPos = [0, 30, 60, 90, 120, 150];
+			_this.isopen = true;
+			return;
+		}
+//		console.log(_this.get_imgPos())
+		//ここはショット中の処理
+		if (_this.get_imgPos() === 90) {
+			if(!_this.isshot){
+				_XES._PARTS_ENEMYSHOT._set_enemyshot(_this);
+				_this.isshot = true;
+			}
+		}
+		if (_this.get_imgPos() === 150) {
+			//ショットが完了したら元に戻す
+			_this.imgPos = [0];
+			_this.isopen = false;
+			_this.isshot = false;
+		}		
+	}
+	moveSet(){
+		let _this=this;
+//		_this.y+=_this.speed;
+	}
+}
+
 export class ENEMY_ZOLBAK extends GameObject_ENEMY {
 	constructor(_p){
 		super({
@@ -613,4 +674,255 @@ export class ENEMY_ZOLBAK extends GameObject_ENEMY {
 		let _this=this;
 //		_this.y+=_this.speed;
 	}
+}
+
+export class ENEMY_DEROTA extends GameObject_ENEMY {
+	constructor(_p){
+		super({
+			img:_p.img||_XC._CANVAS_IMGS.xevious_enemy_derota.obj,
+			x:_p.x,
+			y:_p.y,
+			imgPos:[0,30,60,90,120,150],
+			width:30,
+			height:30,
+			aniItv:20,
+			enemy_type:2
+		});
+		let _this=this;
+		_this.getscore = 1000; //倒した時のスコア
+	}
+	moveSet(){
+		let _this=this;
+	}
+}
+
+export class ENEMY_ZAKATO extends GameObject_ENEMY {
+	constructor(_p){
+		super({
+			img:_p.img||_XC._CANVAS_IMGS.xevious_enemy_zakato.obj,
+			x:_p.x,
+			y:_p.y,
+			imgPos:[0],
+			width:20,
+			height:20,
+			enemy_type:1
+		});
+		let _this=this;
+		_this.getscore = 200; //倒した時のスコア
+		_this._collision_type = 't3';
+		_this.rad = 0;
+		_this.speedx = 1;
+		_this.speedy = 3;
+	}
+	setAlive(){
+		//倒したら弾を発射させる
+		let _this=this;
+		if(!_this.isalive()){
+			_XPO._PARTS_OTHERS._set_score(_this.getscore);
+			_XES._PARTS_ENEMYSHOT._set_enemyshot(this);
+//			_GAME._setPlay(_this.audio_collision);
+		}else{
+//			_GAME._setPlay(_this.audio_alive);			
+		}
+	}
+	shot(){}
+	move_standby(){
+		let _this = this;
+		if (_this.y === 100) {
+			_this.img=_XC._CANVAS_IMGS.xevious_enemies_collapes0.obj;
+			_this.imgPos=[0,60,120,180,240,320,400,480,540,600];
+			_this.width=60;
+			_this.height=60;
+			//			_this._standby = false;
+//			_this.speedx=(_this.x<(_GAME_COMMON._canvas.width/2))?1:-1;
+		}
+		if(_this.y > 100){
+			//登場する前の描画
+			_GAME_COMMON._context.save();
+			_GAME_COMMON._context.drawImage(
+				_this.img,
+				_this.get_imgPos(),
+				0,
+				_this.width,
+				_this.height,
+				_this.x-(_this.width/2),
+				_this.y-(_this.height/2),
+				_this.width,
+				_this.height
+			);
+			_GAME_COMMON._context.restore();
+
+		}
+//		console.log(_this.get_imgPos())
+		if(_this.get_imgPos()===600){
+			_this._standby = false;
+			_this.img=_XC._CANVAS_IMGS.xevious_enemy_zakato.obj;
+			_this.imgPos=[0];
+			_this.width=20;
+			_this.height=20;
+
+			let _o=_XPPM._PARTS_PLAYERMAIN._get_players_location();
+			if(_o===undefined){return;}
+			_this.rad=Math.atan2((_o.y-_this.y),(_o.x-_this.x));
+			_this.speedx=Math.cos(_this.rad)*2;
+			_this.speedy=Math.sin(_this.rad)*2;
+		}
+//		_this.setDrawImage();
+		_this.set_imgPos();
+	}
+	moveSet(){
+		let _this=this;
+		let _o = _XPPM._PARTS_PLAYERMAIN._get_players_location;
+		_this.x+=_this.speedx;
+		_this.y+=_this.speedy;
+	}
+}
+
+
+
+
+
+
+
+export class ENEMY_ANDORGENESIS extends GameObject_ENEMY {
+	constructor(_p){
+		super({
+			img:_XC._CANVAS_IMGS.xevious_enemy_andorgenesis.obj,
+			x:_p.x,
+			y:_p.y,
+			imgPos:[0],
+			width:250,
+			height:250
+		});
+		let _this=this;
+		_this.getscore = 6000; //倒した時のスコア
+		_this.is_ignore = true;
+		_this._count = 0;
+		_this.ar_child = new Array();
+		_this.ar_child_status = true;//子要素が全て生存していない場合はfalse
+
+		_this.def_child=[
+			{obj:new Object(),img:_XC._CANVAS_IMGS.xevious_enemy_andorgenesis_child0.obj,x:75,y:75,colx:10},
+			{obj:new Object(),img:_XC._CANVAS_IMGS.xevious_enemy_andorgenesis_child1.obj,x:160,y:75},
+			{obj:new Object(),img:_XC._CANVAS_IMGS.xevious_enemy_andorgenesis_child2.obj,x:75,y:160,colx:10,coly:-5},
+			{obj:new Object(),img:_XC._CANVAS_IMGS.xevious_enemy_andorgenesis_child3.obj,x:160,y:160,coly:-5},
+			{obj:new Object(),img:_XC._CANVAS_IMGS.xevious_enemy_andorgenesis_child4.obj,x:110,y:110,width:30,height:30,imgPos: [0, 30, 60, 90, 120, 150],colx:15,coly:5},
+		]
+
+	}
+	shot(){}
+	move_standby(){
+		let _this=this;
+		if(_this.y+_this.height<0){return;}
+		_this.def_child.map((_o)=>{
+			let _obj = new ENEMY_ANDORGENESIS_CHILD({
+				img: _o.img,
+				imgPos: _o.imgPos || [0, 18, 36, 54, 72, 90],
+				width: _o.width || 18,
+				height: _o.height || 18,
+				x: _this.x + _o.x,
+				y: _this.y + _o.y,
+				colx: _o.colx || 0,
+				coly: _o.coly || 0,
+			});
+			_o.obj = _obj;
+			_PARTS_ENEMIESMAIN._enemies_field.push(_obj);
+		});
+		_this._standby = false;
+
+	}
+	def_child_remove(){
+		let _this = this;
+		_this.def_child.map((_o)=>{_o.obj.init();});
+	}
+	def_child_moveset() {
+		let _this = this;
+		//移動のセット
+		_this.def_child.map((_o) => {
+			_o.obj.moveSet({
+				x: _this.x + _o.x,
+				y: _this.y + _o.y
+			});
+		});
+
+		//中心が破壊されたら全破壊させる
+		if (_this.def_child[4].obj._status === 0) {
+			_this.def_child.map((_o) => {
+				_o.obj._status = 0;
+			});
+		}
+
+		//子要素が全て破壊
+		let _r=_this.def_child.find((_e)=>{return _e.obj._status === 1;});
+		if(_r===undefined){_this.ar_child_status = false;}
+		
+	}
+	moveSet(){
+		let _this=this;
+		_this.y=(()=>{
+			//全て破壊した場合
+			if(!_this.ar_child_status){return _this.y-_this.speed*3;}
+			//登場するとき
+			if(_this.y<100&&_this._count<1000){return _this.y+_this.speed;}
+			_this._count++;
+			//一定時間を超えた時
+			if(_this._count>1000){return _this.y-_this.speed*3;}
+			return _this.y-_this.speed;
+		})();
+		if (_this.y + _this.height < 0) {
+			_this.init();
+			_this.def_child_remove();
+			return;
+		}
+
+		_this.def_child_moveset();
+	}
+}
+
+export class ENEMY_ANDORGENESIS_CHILD extends GameObject_ENEMY {
+	constructor(_p){
+		super({
+			img:_p.img||_XC._CANVAS_IMGS.xevious_enemy_andorgenesis.obj,
+			x:_p.x,
+			y:_p.y,
+			imgPos:_p.imgPos||[0],
+			width:_p.width||30,
+			height:_p.height||30,
+			enemy_type:2
+		});
+		let _this=this;
+		_this.getscore = 50; //倒した時のスコア
+		_this._standby = false;
+		_this._count = 0;
+		_this.colx = _p.colx || 0;
+		_this.coly = _p.coly || 0;
+	}
+	shot(){
+		let _this = this;
+		if(Math.random()>=_PARTS_ENEMIESMAIN._shot_rate){return;}
+		_XES._PARTS_ENEMYSHOT._set_enemyshot(_this);
+	}
+	showCollapes(_x, _y) {
+		let _this = this;
+		//敵を倒した場合
+		_this._isshow = false;
+		//爆発して終了
+		_XPO._PARTS_COLLISION._set_collision({
+			x: _x || _this.x+_this.colx,
+			y: _y || _this.y+_this.coly,
+			type: _this._collision_type
+		});
+	}
+//	setDrawImage(){console.log('d')}
+	moveSet(_p){
+		let _this=this;
+		if (!_this.isMove()) {
+			return;
+		}
+		_this.x=_p.x;
+		_this.y=_p.y;
+		_this.shot();
+		_this.set_imgPos();
+	}
+	move(){}
 }

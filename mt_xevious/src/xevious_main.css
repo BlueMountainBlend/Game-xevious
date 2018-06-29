@@ -19,7 +19,7 @@ html,body{
     user-select:none;
 }
 body::before {
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,0.6);
     left: 0;
     content: '';
 	height: 100%;
@@ -45,6 +45,7 @@ body *{box-sizing:border-box;}
 #game_wrapper.on {
 	animation: _fadein 1.0s;
 	display: flex;
+	justify-content: center;
 	opacity: 1;
 }
 
@@ -309,28 +310,28 @@ iPhoneX
 	}
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.r {
-		right: 205px;
+		right: 195px;
 		bottom: 100px;
 		height: 50px;
 		width: 50px;
 	}
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.p {
-		right: 150px;
+		right: 140px;
 		bottom: 100px;
 		height: 50px;
 		width: 50px;
 	}
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.s {
-		right: 95px;
+		right: 85px;
 		bottom: 100px;
 		height: 50px;
 		width: 50px;
 	}
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.b {
-		right: 70px;
+		right: 90px;
 		bottom: 0px;
 		height: 90px;
 		width: 90px;
@@ -338,7 +339,7 @@ iPhoneX
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.a {
 		right: 0px;
-		bottom: 60px;
+		bottom: 40px;
 		height: 90px;
 		width: 90px;
 	}
@@ -382,28 +383,28 @@ iPhone 5.5 4.7 4.0inch
 	}
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.r {
-		right: 205px;
+		right: 185px;
 		bottom: 80px;
 		height: 50px;
 		width: 50px;
 	}
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.p {
-		right: 150px;
+		right: 130px;
 		bottom: 80px;
 		height: 50px;
 		width: 50px;
 	}
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.s {
-		right: 95px;
+		right: 75px;
 		bottom: 80px;
 		height: 50px;
 		width: 50px;
 	}
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.b {
-		right: 50px;
+		right: 80px;
 		bottom: 0px;
 		height: 70px;
 		width: 70px;
@@ -411,7 +412,7 @@ iPhone 5.5 4.7 4.0inch
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.a {
 		right: 0px;
-		bottom: 60px;
+		bottom: 30px;
 		height: 70px;
 		width: 70px;
 	}
@@ -478,7 +479,7 @@ iPhone 4.0inch
 	}
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.b {
-		right: 50px;
+		right: 70px;
 		bottom: 0px;
 		height: 60px;
 		width: 60px;
@@ -486,7 +487,7 @@ iPhone 4.0inch
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.a {
 		right: 0px;
-		bottom: 60px;
+		bottom: 30px;
 		height: 60px;
 		width: 60px;
 	}
