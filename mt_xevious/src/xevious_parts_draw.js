@@ -97,9 +97,6 @@ export const _DRAW_GAMECLEAR = () => {
 	_GAME_COMMON._setDrawText('PRESS R TO RESTART', 'center', 400, 0.3);
 }
 export const _DRAW_GAMESTART = () =>{
-	// _XPE._PARTS_ENEMIESMAIN._reset();
-	// _XPE._PARTS_ENEMIESMAIN._init();
-
 	_XPPM._PARTS_PLAYERMAIN._reset();
 	_XES._PARTS_ENEMYSHOT._reset();
 
@@ -115,6 +112,8 @@ export const _DRAW_GAMESTART = () =>{
 
 	_XMP._MAP._set_gamestart();
 
+	_GAME_COMMON._setStopOnBG();
+	_GAME_COMMON._setPlayOnBG(_XC._CANVAS_AUDIOS['bg_main']);
 	_DRAW();
 }
 export const _DRAW_STOP = () => {
@@ -125,10 +124,11 @@ export const _DRAW_STOP = () => {
 export const _DRAW_SWITCH = () => {
 	if (_DRAW_SETINTERVAL !== null) {
 		_DRAW_STOP();
+		_GAME_COMMON._setStopOnBG();
 //		_GAME._setStopOnBG();
 	} else {
 		_DRAW();
-//		_GAME._setPlayOnBG(_GAME._audio_now_obj_bg);
+		_GAME_COMMON._setPlayOnBG(_XC._CANVAS_AUDIOS['bg_main']);
 	}
 }
 
@@ -157,6 +157,8 @@ export const _DRAW_RESET_OBJECT = () => {
 
 	_FLAG_GAMEOVER=false;
 	_COUNT_GAMEOVER=0;
+
+	_GAME_COMMON._setStopOnBG();
 	_DRAW_START();
 }
 
@@ -171,6 +173,7 @@ export const _DRAW_START = () => {
 	_XPPM._PARTS_PLAYERMAIN._init_players_obj({});
 	_DRAW_OBJ_BACKGROUND.init();
 	_XPO._PARTS_OTHERS._init_others_obj();
+	_GAME_COMMON._setPlayOnBG(_XC._CANVAS_AUDIOS['bg_start'],false);
 
 	let _c = 0;
 	const _loop = () => {

@@ -138,9 +138,56 @@ export const _CANVAS_IMGS={
 };
 
 export const _CANVAS_AUDIOS={
-	'shot_laser':
-		{src:'audios/shot_laser.mp3',
+	'bg_start': {
+		src: 'audios/bg_start.mp3',
+		volume: 1.0,
+		obj: null,
+		buf: new Object()
+	},
+	'bg_main':
+		{src:'audios/bg_main.mp3',
 		 volume:1.0,
 		 obj:null,
 		 buf:new Object()},
+
+	'shot': {
+		src: 'audios/shot.mp3',
+		volume: 1.0,
+		obj: null,
+		buf: new Object()
+	},
+	'shot_missile': {
+		src: 'audios/shot_missile.mp3',
+		volume: 1.0,
+		obj: null,
+		buf: new Object()
+	},
+
+	'player_collision': {
+		src: 'audios/player_collision.mp3',
+		volume: 1.0,
+		obj: null,
+		buf: new Object()
+	},
+
+	'enemy_collision1': {
+		src: 'audios/enemy_collision1.mp3',
+		volume: 1.0,
+		obj: null,
+		buf: new Object()
+	},
+	'enemy_collision2': {
+		src: 'audios/enemy_collision2.mp3',
+		volume: 1.0,
+		obj: null,
+		buf: new Object()
+	},
+	'enemy_collision3': {
+		src: 'audios/enemy_collision3.mp3',
+		volume: 1.0,
+		obj: null,
+		buf: new Object()
+	},
+
+
 };

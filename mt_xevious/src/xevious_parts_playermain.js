@@ -208,6 +208,8 @@ export const _PARTS_PLAYERMAIN={
 			if(_s._shot_alive){continue;}
 			//ショット中は、ショットを有効にしない
 			_s._shot=true;
+			_GAME_COMMON._setPlay(_XC._CANVAS_AUDIOS['shot']);
+
 //			console.log('shot')
 
 			//最初の要素（自機）のみショット音をだす
@@ -238,6 +240,8 @@ export const _PARTS_PLAYERMAIN={
 			//ショット中は、ショットを有効にしない
 			if(_sm._shot_alive){continue;}
 			_sm._shot=true;
+			_GAME_COMMON._setPlay(_XC._CANVAS_AUDIOS['shot_missile']);
+
 			//最初の要素（自機）のみショット音をだす
 			if(_i!==0){continue;}
 //			_GAME._setPlay(_sm._audio);
@@ -376,6 +380,7 @@ export class GameObject_PLAYER_MAIN extends GameObject_PLAYER{
 				y:_this.y+_this.height-15,
 				type:'t0'
 			});
+			_GAME_COMMON._setPlay(_XC._CANVAS_AUDIOS['player_collision']);
 			_XPD._SET_GAMEOVER();
 		}
 		_this._col_c=(_this._col_c>2)?2:_this._col_c+1;
