@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --open && webpack --watch",
-    "build": "cp ./src/*.json ./dist/ && webpack && node ./imagemin.js && html-dist --config html-dist.config.js --input ./src/xevious.html > ./dist/xevious.html",
+    "build": "cp ./src/audios/* ./dist/audios/ && cp ./src/*.json ./dist/ && webpack && node ./imagemin.js && html-dist --config html-dist.config.js --input ./src/xevious.html > ./dist/xevious.html",
     "watch": "webpack --watch"
   },
   "keywords": [],

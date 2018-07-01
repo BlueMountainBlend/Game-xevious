@@ -492,6 +492,7 @@ export const _KEYEVENT_SP = {
 
 'keydown_game_a':function(e){
 	_XPPM._PARTS_PLAYERMAIN._control_start_shots();
+	_GAME_COMMON._setPlay(_XC._CANVAS_AUDIOS['shot']);
 },//keydown_game_a
 'keydown_game_b':function(e){
 	_XPPM._PARTS_PLAYERMAIN._control_start_missile_shots();

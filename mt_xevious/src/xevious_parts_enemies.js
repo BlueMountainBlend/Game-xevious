@@ -127,8 +127,8 @@ class GameObject_ENEMY{
 		_this._s=_p.s||'0';//MAP衝突ビット
 		_this.enemy_type=_p.enemy_type||1; //1:空中,2:地上
 
-		// _this.audio_collision=_CANVAS_AUDIOS['enemy_collision1'];
-		// _this.audio_alive=_CANVAS_AUDIOS['enemy_collision3'];
+		_this.audio_collision = _XC._CANVAS_AUDIOS['enemy_collision1'];
+		_this.audio_alive = _XC._CANVAS_AUDIOS['enemy_collision3'];
 		
 		_this.isshot=false;
 
@@ -213,9 +213,9 @@ class GameObject_ENEMY{
 		let _this=this;
 		if(!_this.isalive()){
 			_XPO._PARTS_OTHERS._set_score(_this.getscore);
-//			_GAME._setPlay(_this.audio_collision);
+			_GAME_COMMON._setPlay(_this.audio_collision);
 		}else{
-//			_GAME._setPlay(_this.audio_alive);			
+			_GAME_COMMON._setPlay(_this.audio_alive);
 		}
 	}
 	setStatus(){
@@ -556,8 +556,9 @@ export class ENEMY_BACURA extends GameObject_ENEMY {
 			height:40
 		});
 		let _this=this;
-		_this.is_able_collision = false;
+//		_this.is_able_collision = false;
 		_this.speed = 1;
+		_this._status = 255;
 	}
 	shot(){}
 	moveSet(){
@@ -593,6 +594,7 @@ export class ENEMY_BARRA extends GameObject_ENEMY {
 		});
 		let _this=this;
 		_this.getscore = 100; //倒した時のスコア
+		_this.audio_collision = _XC._CANVAS_AUDIOS['enemy_collision2'];
 
 	}
 	shot(){}
@@ -619,6 +621,7 @@ export class ENEMY_LOGRAM extends GameObject_ENEMY {
 		_this.getscore = 200; //倒した時のスコア
 		_this.isopen = false;
 		_this.isshot = false;
+		_this.audio_collision = _XC._CANVAS_AUDIOS['enemy_collision2'];
 
 	}
 	shot(){
@@ -667,13 +670,10 @@ export class ENEMY_ZOLBAK extends GameObject_ENEMY {
 		});
 		let _this=this;
 		_this.getscore = 200; //倒した時のスコア
+		_this.audio_collision = _XC._CANVAS_AUDIOS['enemy_collision2'];
 
 	}
 	shot(){}
-	moveSet(){
-		let _this=this;
-//		_this.y+=_this.speed;
-	}
 }
 
 export class ENEMY_DEROTA extends GameObject_ENEMY {
@@ -690,6 +690,7 @@ export class ENEMY_DEROTA extends GameObject_ENEMY {
 		});
 		let _this=this;
 		_this.getscore = 1000; //倒した時のスコア
+		_this.audio_collision = _XC._CANVAS_AUDIOS['enemy_collision2'];
 	}
 	moveSet(){
 		let _this=this;
@@ -713,17 +714,6 @@ export class ENEMY_ZAKATO extends GameObject_ENEMY {
 		_this.rad = 0;
 		_this.speedx = 1;
 		_this.speedy = 3;
-	}
-	setAlive(){
-		//倒したら弾を発射させる
-		let _this=this;
-		if(!_this.isalive()){
-			_XPO._PARTS_OTHERS._set_score(_this.getscore);
-			_XES._PARTS_ENEMYSHOT._set_enemyshot(this);
-//			_GAME._setPlay(_this.audio_collision);
-		}else{
-//			_GAME._setPlay(_this.audio_alive);			
-		}
 	}
 	shot(){}
 	move_standby(){
@@ -772,6 +762,11 @@ export class ENEMY_ZAKATO extends GameObject_ENEMY {
 	}
 	moveSet(){
 		let _this=this;
+
+		if (!_this.isalive()) {
+			_XES._PARTS_ENEMYSHOT._set_enemyshot(this);
+			return;
+		}
 		let _o = _XPPM._PARTS_PLAYERMAIN._get_players_location;
 		_this.x+=_this.speedx;
 		_this.y+=_this.speedy;
@@ -800,6 +795,7 @@ export class ENEMY_ANDORGENESIS extends GameObject_ENEMY {
 		_this._count = 0;
 		_this.ar_child = new Array();
 		_this.ar_child_status = true;//子要素が全て生存していない場合はfalse
+		_this.audio_collision = _XC._CANVAS_AUDIOS['enemy_collision2'];
 
 		_this.def_child=[
 			{obj:new Object(),img:_XC._CANVAS_IMGS.xevious_enemy_andorgenesis_child0.obj,x:75,y:75,colx:10},
@@ -896,6 +892,7 @@ export class ENEMY_ANDORGENESIS_CHILD extends GameObject_ENEMY {
 		_this._count = 0;
 		_this.colx = _p.colx || 0;
 		_this.coly = _p.coly || 0;
+		_this.audio_collision = _XC._CANVAS_AUDIOS['enemy_collision2'];
 	}
 	shot(){
 		let _this = this;

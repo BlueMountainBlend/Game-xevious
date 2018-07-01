@@ -116,6 +116,11 @@ const _GAME_COMMON = {
 	_issp: (window.ontouchstart === null),
 	_score: null,
 
+	_audio_buffer_loader:null,
+	_audio_now_obj_bg:null,//バックグラウンド現在再生用
+	_audio_context_source_bg:null,//バックグラウンド再生用
+	_is_audio_context_source_bg:false,//バックグラウンド再生中判別フラグ
+
 	_IS_SQ_COL:0,
 	_IS_SQ_COL_NONE:1,
 	_IS_SQ_NOTCOL:2,
@@ -504,6 +509,44 @@ const _GAME_COMMON = {
 		}//_i
 		return {ret:_this._IS_SQ_NOTCOL,val:_this._canvas.width};
 	},
+	_setPlay(_obj){
+		let _this = this;
+		if(_obj===null||_obj===undefined){return;}
+	
+		var _s=_this._audio_context.createBufferSource();
+		_s.buffer=_obj.buf;
+		_s.loop=false;
+		_s.connect(_this._audio_context.destination);
+		_s.start(0);
+		
+	},
+	_setPlayOnBG(_obj,_loop){
+		let _this = this;
+		//バックグラウンド用再生
+		if(_obj===null||_obj===undefined){return;}
+		
+		if(this._is_audio_context_source_bg===true){
+			this._audio_context_source_bg.stop();
+			this._is_audio_context_source_bg=false;
+		}
+		let _t = _this._audio_context.createBufferSource();
+		_t.buffer=_obj.buf;
+		this._audio_now_obj_bg=_obj;//バッファの一時保存用
+		_t.loop=(_loop===false)?false:true;
+		_t.loopStart=0;
+		_t.connect(_this._audio_context.destination);
+		_t.start(0,0);
+		
+		this._audio_context_source_bg=_t;
+		this._is_audio_context_source_bg=true;
+	},
+	_setStopOnBG(){
+		//バックグラウンド用停止
+		if(!this._is_audio_context_source_bg){return;}
+		this._audio_context_source_bg.stop();
+		this._is_audio_context_source_bg=false;
+	},
+
 };
 
 export default _GAME_COMMON;
