@@ -49,6 +49,11 @@ export const _CANVAS_IMGS={
 		rate: 1.00,
 		obj: new Image()
 	},
+	'xevious_enemy_garu_derota': {
+		src: 'images/xevious_enemy_garu_derota.png',
+		rate: 1.00,
+		obj: new Image()
+	},
 	'xevious_enemy_zolbak': {
 		src: 'images/xevious_enemy_zolbak.png',
 		rate: 1.00,
@@ -66,6 +71,11 @@ export const _CANVAS_IMGS={
 	},
 	'xevious_enemy_derota': {
 		src: 'images/xevious_enemy_derota.png',
+		rate: 1.00,
+		obj: new Image()
+	},
+	'xevious_enemy_torkan': {
+		src: 'images/xevious_enemy_torkan.png',
 		rate: 1.00,
 		obj: new Image()
 	},
