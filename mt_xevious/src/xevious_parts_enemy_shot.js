@@ -92,7 +92,7 @@ class GameObject_ENEMYSHOT{
 		_this.aniItv=_p.aniItv||5;//アニメーション間隔
 		_this.basePoint=_p.basePoint||1;
 
-		_this.speed=2;//定義：発射スピード
+		_this.speed=3;//定義：発射スピード
 		_this.rad=_p.rad||Math.atan2((_this.ty-_this.y),(_this.tx-_this.x));//ラジアン
 		_this.sx=Math.cos(_this.rad);//単位x
 		_this.sy=Math.sin(_this.rad);//単位y
@@ -141,7 +141,7 @@ class GameObject_ENEMYSHOT{
 	move(){
 		let _this=this;
 		_this.map_collition();
-		_this.y = _XMP._MAP._getY(_this.y);
+//		_this.y = _XMP._MAP._getY(_this.y);
 		if(_this.y<0){return;}
 		if(_GAME_COMMON.isCanvasOut(_this)){
 			_this.init();
@@ -151,28 +151,5 @@ class GameObject_ENEMYSHOT{
 		_this.y+=_this.sy*_this.speed;
 
 		_this.set_imgPos();
-	}
-}
-
-export class ENEMY_SHOT_LASER
-	extends GameObject_ENEMYSHOT{
-	constructor(_p){
-		super({
-			x: _p.x,
-			y: _p.y,
-			img:_p.img||_CANVAS_IMGS['enemy_bullet_laser'].obj,
-			width:_p.width||30
-		});
-		this.speed=10;
-	}
-	move(){
-		let _this=this;
-		if(_GAME.isEnemyCanvasOut(_this)){
-			_this.init();
-			return;
-		}
-		_this.map_collition();
-
-		_this.x-=_this.speed;
 	}
 }

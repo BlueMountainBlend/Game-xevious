@@ -51,9 +51,19 @@ export const _PARTS_ENEMIESMAIN={
 			'_getObj':()=>{return new ENEMY_ZAKATO({})}
 		},
 		'g':{
-			'_gamestart':(_x,_y)=>{_PARTS_ENEMIESMAIN._enemies_fly.push(new ENEMY_DEROTA({x:_x,y:_y}));},
+			'_gamestart':(_x,_y)=>{_PARTS_ENEMIESMAIN._enemies_field.push(new ENEMY_DEROTA({x:_x,y:_y}));},
 			'_st':'',
 			'_getObj':()=>{return new ENEMY_DEROTA({})}
+		},
+		'h':{
+			'_gamestart':(_x,_y)=>{_PARTS_ENEMIESMAIN._enemies_field.push(new ENEMY_GARU_DEROTA({x:_x,y:_y}));},
+			'_st':'',
+			'_getObj':()=>{return new ENEMY_GARU_DEROTA({})}
+		},
+		'i':{
+			'_gamestart':(_x,_y)=>{_PARTS_ENEMIESMAIN._enemies_fly.push(new ENEMY_TORKAN({x:_x,y:_y}));},
+			'_st':'',
+			'_getObj':()=>{return new ENEMY_TORKAN({})}
 		},
 
 
@@ -345,7 +355,7 @@ class GameObject_ENEMY{
 	moveSet(){}
 	move_standby(){
 		let _this=this;
-		if (_this.y < 0) {
+		if (_this.y+_this.height > 0) {
 			_this._standby=false;
 		}
 	}
@@ -650,10 +660,6 @@ export class ENEMY_LOGRAM extends GameObject_ENEMY {
 			_this.isshot = false;
 		}		
 	}
-	moveSet(){
-		let _this=this;
-//		_this.y+=_this.speed;
-	}
 }
 
 export class ENEMY_ZOLBAK extends GameObject_ENEMY {
@@ -692,8 +698,63 @@ export class ENEMY_DEROTA extends GameObject_ENEMY {
 		_this.getscore = 1000; //倒した時のスコア
 		_this.audio_collision = _XC._CANVAS_AUDIOS['enemy_collision2'];
 	}
-	moveSet(){
-		let _this=this;
+}
+
+export class ENEMY_GARU_DEROTA extends GameObject_ENEMY {
+	constructor(_p) {
+		super({
+			img: _XC._CANVAS_IMGS.xevious_enemy_garu_derota.obj,
+			x: _p.x,
+			y: _p.y,
+			imgPos: [0, 60, 120, 180, 240, 300],
+			width: 60,
+			height: 60,
+			aniItv: 20,
+			enemy_type: 2
+		});
+		let _this = this;
+		_this.getscore = 1000; //倒した時のスコア
+		_this.audio_collision = _XC._CANVAS_AUDIOS['enemy_collision2'];
+		_this.shotColMap = ["15,15,30,30"];
+		_this._is_collision=false;
+	}
+	showCollapes() {
+		let _this = this;
+		if(_this._is_collision){return;}
+		//敵を倒した場合
+		_this.imgPos = [360, 420, 480, 540, 600, 660];
+		//爆発して終了
+		_XPO._PARTS_COLLISION._set_collision({
+			x: _this.x+30,
+			y: _this.y+30,
+			type: _this._collision_type
+		});
+		_this._is_collision=true;
+	}
+	setDrawImage() {
+		let _this = this;
+		_GAME_COMMON._context.save();
+		_GAME_COMMON._context.drawImage(
+			_this.img,
+			_this.get_imgPos(),
+			0,
+			_this.width,
+			_this.height,
+			_this.x,
+			_this.y,
+			_this.width,
+			_this.height
+		);
+		_GAME_COMMON._context.restore();
+	}
+	move() {
+		let _this = this;
+		_this.x = _XMP._MAP._getX(_this.x);
+		_this.y = _XMP._MAP._getY(_this.y);
+		_this.set_imgPos();
+		if (!_this.isMove()) {return;}
+		_this.moveSet();
+		_this.shot();
 	}
 }
 
@@ -716,6 +777,18 @@ export class ENEMY_ZAKATO extends GameObject_ENEMY {
 		_this.speedy = 3;
 	}
 	shot(){}
+	showCollapes() {
+		let _this = this;
+		//敵を倒した場合
+		_this._isshow = false;
+		//爆発して終了
+		_XPO._PARTS_COLLISION._set_collision({
+			x: _this.getEnemyCenterPosition()._x,
+			y: _this.getEnemyCenterPosition()._y,
+			type: _this._collision_type
+		});
+		_XES._PARTS_ENEMYSHOT._set_enemyshot(_this);
+	}
 	move_standby(){
 		let _this = this;
 		if (_this.y === 100) {
@@ -773,6 +846,60 @@ export class ENEMY_ZAKATO extends GameObject_ENEMY {
 	}
 }
 
+export class ENEMY_TORKAN extends GameObject_ENEMY {
+	constructor(_p) {
+		super({
+			img: _XC._CANVAS_IMGS.xevious_enemy_torkan.obj,
+			x: _p.x,
+			y: _p.y,
+			imgPos: [0],
+			width: 30,
+			height: 30,
+			aniItv: 10,
+			enemy_type: 1
+		});
+		let _this = this;
+		_this.getscore = 50; //倒した時のスコア
+
+		_this.init_speedx=(_p.x>_GAME_COMMON._canvas.width/2)?-1:1;
+		_this.init_speedy = 5;
+		_this.speedx=_this.init_speedx;
+		_this.speedy=_this.init_speedy;
+		_this.changeY=(Math.random()*400-200)+200;
+
+		_this.changedY = false;//止まったときにtrue
+		_this.isshot = false;//弾発射完了後にtrue
+	}
+	shot(){
+		//この敵は1回だけ弾を発射させる。
+		let _this = this;
+		if (!_this.changedY){return;}
+		if(_this.isshot){return;}
+		_XES._PARTS_ENEMYSHOT._set_enemyshot(this);
+		_this.isshot = true;
+	}
+	moveSet() {
+		let _this = this;
+		_this.y += _this.speedy;
+		if (_this.changedY && _this.y<0){_this.init();return;}
+		if (_this.changedY && _this.get_imgPos() === 150) {
+			_this.imgPos=[180];
+			_this.speedx = _this.init_speedx * -1;
+			_this.speedy = _this.init_speedy * -1;
+			return;
+		}
+		//止まってショットを放つ
+		if(_this.y>_this.changeY&&_this.speedy>=0){
+			_this.imgPos=[0,30,60,90,120,150];
+			_this.speedx=0;
+			_this.speedy=0;
+			_this.shot();
+			_this.changedY=true;
+			return;
+		}
+		_this.x += _this.speedx;
+	}
+}
 
 
 
