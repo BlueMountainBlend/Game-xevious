@@ -79,6 +79,11 @@ export const _CANVAS_IMGS={
 		rate: 1.00,
 		obj: new Image()
 	},
+	'xevious_enemy_sol': {
+		src: 'images/xevious_enemy_sol.png',
+		rate: 1.00,
+		obj: new Image()
+	},
 
 
 	'xevious_enemy_andorgenesis': {

@@ -66,6 +66,13 @@ export const _PARTS_ENEMIESMAIN={
 			'_getObj':()=>{return new ENEMY_TORKAN({})}
 		},
 
+		//隠れキャラクター
+		'y':{
+			'_gamestart':(_x,_y)=>{_PARTS_ENEMIESMAIN._enemies_field.push(new ENEMY_SOL({x:_x,y:_y}));},
+			'_st':'',
+			'_getObj':()=>{return new ENEMY_SOL({})}
+		},
+
 
 		'z':{
 			'_gamestart':(_x,_y)=>{_PARTS_ENEMIESMAIN._enemies_field.push(new ENEMY_ANDORGENESIS({x:_x,y:_y}));},
@@ -608,10 +615,6 @@ export class ENEMY_BARRA extends GameObject_ENEMY {
 
 	}
 	shot(){}
-	moveSet(){
-		let _this=this;
-//		_this.y+=_this.speed;
-	}
 }
 
 
@@ -902,6 +905,61 @@ export class ENEMY_TORKAN extends GameObject_ENEMY {
 }
 
 
+export class ENEMY_SOL extends GameObject_ENEMY {
+	constructor(_p){
+		super({
+			img:_XC._CANVAS_IMGS.xevious_enemy_sol.obj,
+			x:_p.x,
+			y:_p.y,
+			aniItv:20,
+			imgPos:[0],
+			width:80,
+			height:80,
+			enemy_type: 2
+
+		});
+		let _this = this;
+		_this.getscore = 2000; //倒した時のスコア
+		_this._status = 2;
+		_this.shotColMap = ["0,0,30,30"];
+
+//		_this.is_ignore = true;
+//		_this.is_able_collision = false;
+	}
+	showCollapes() {
+		let _this = this;
+		//敵を倒した場合
+		_this._isshow = false;
+		//爆発して終了
+		_XPO._PARTS_COLLISION._set_collision({
+			x: _this.x+20,
+			y: _this.y+20,
+			type: _this._collision_type
+		});
+		//地上の敵は爆発後の画像を表示させる
+		_XPO._PARTS_COLLISION._set_collapsed_field({
+			x: _this.x+20,
+			y: _this.y+20
+		});
+	}
+	shot(){}
+	moveSet(){
+		let _this=this;
+		if (_this._status === 0) {
+			_this.init();
+			return;
+		}
+		if (_this.get_imgPos() === 560) {
+			_this.imgPos=[560];
+			_this.is_ignore = false;
+			return;
+		}
+		if (_this._status === 1) {
+			_this.imgPos = [0, 80, 160, 240, 320, 400, 480, 560];
+			_this.is_ignore = true;
+		}
+	}
+}
 
 
 
