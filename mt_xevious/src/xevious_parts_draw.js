@@ -103,12 +103,18 @@ export const _DRAW_GAMESTART = () =>{
 	_XPPM._PARTS_PLAYERMAIN._init_players_obj({});
 	_DRAW_OBJ_BACKGROUND.init();
 	_XCE._KEYEVENT_MASTER.removeKeydownStart();
+	_XCE._KEYEVENT_MASTER.removeKeydownGameclear();
 	_XCE._KEYEVENT_MASTER.removeKeydownGameover();
 	_XCE._KEYEVENT_MASTER.addKeydownGame();
 	_XCE._KEYEVENT_MASTER.addKeyupGame();
 
 	_XPO._PARTS_OTHERS._init_others_obj();
 	_XPO._PARTS_COLLISION.init();
+
+
+	_XPE._PARTS_ENEMIESMAIN._init(_start_select);
+	_XES._PARTS_ENEMYSHOT._init(_start_select);
+
 
 	_XMP._MAP._set_gamestart();
 
@@ -159,10 +165,13 @@ export const _DRAW_RESET_OBJECT = () => {
 	_COUNT_GAMEOVER=0;
 
 	_GAME_COMMON._setStopOnBG();
-	_DRAW_START();
 }
 
 //スタート画面表示
+let _start_select = 0;
+export const _SET_DRAW_START_SELECT = (_num) => {
+	_start_select = ((_start_select === 0 && _num < 0) || (_start_select === 2 && _num > 0)) ? _start_select : _start_select + _num;
+}
 export const _DRAW_START = () => {
 	_DRAW_OBJ_BACKGROUND = new _XPO.xevious_background({});
 	_XCE._KEYEVENT_MASTER.addKeydownStart();
@@ -176,6 +185,7 @@ export const _DRAW_START = () => {
 	_GAME_COMMON._setPlayOnBG(_XC._CANVAS_AUDIOS['bg_start'],false);
 
 	let _c = 0;
+	_start_select = 0;
 	const _loop = () => {
 		_DRAW_SETINTERVAL = window.requestAnimationFrame(_loop);
 		_GAME_COMMON._context.clearRect(0, 0, _GAME_COMMON._canvas.width, _GAME_COMMON._canvas.height);
@@ -192,8 +202,19 @@ export const _DRAW_START = () => {
 			basePoint: 1
 		});
 		_GAME_COMMON._setDrawText('NO PAKURI', 'center', 280, 0.3);
+		_GAME_COMMON._setDrawText('EASY', 'center', 380, 0.3);
+		_GAME_COMMON._setDrawText('NORMAL', 'center', 420, 0.3);
+		_GAME_COMMON._setDrawText('HARD', 'center', 460, 0.3);
+
+		//選択矩形表示
+//		_GAME_COMMON._context.save();
+//		console.log(_start_select)
+		_GAME_COMMON._context.strokeStyle='rgba(255,255,255,1)';
+		_GAME_COMMON._context.strokeRect(100, 375+(40*_start_select), _GAME_COMMON._canvas.width-200, 30);
+		_GAME_COMMON._context.stroke();
+//		_GAME_COMMON._context.restore();
 		if (_c % 30 > 5 && _c % 30 < 30) {
-			_GAME_COMMON._setDrawText('PRESS S TO START', 'center', 400, 0.3);
+			_GAME_COMMON._setDrawText('PRESS S TO DECIDE', 'center', 510, 0.2);
 		}
 		_c = (_c > 30) ? 0 : _c + 1;
 	}

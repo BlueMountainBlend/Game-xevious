@@ -15,9 +15,9 @@ import * as _XPPM from './xevious_parts_playermain';
 export const _PARTS_ENEMIESMAIN={
 	_enemies_field:new Array(),
 	_enemies_fly:new Array(),
-	_shot_rate:0.005,
-	_init(){//暫定
-		let _this = this;
+	_shot_rate:0.001,
+	_init(_num){
+		this._shot_rate=0.001*(_num+1);
 	},
 	_map_def:{
 		'a':{

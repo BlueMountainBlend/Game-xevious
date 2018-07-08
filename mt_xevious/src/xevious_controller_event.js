@@ -20,6 +20,10 @@ export const _KEYEVENT_MASTER = {
 			.addEventListener(
 			_EVENT_KEYDOWN,
 			_KEYEVENT_SP.keydown_start);
+		_SP_CONTROLLER._sp_main_center
+			.addEventListener(
+				_EVENT_KEYDOWN,
+				_KEYEVENT_SP.keymove_start_controller);
 	}else{
 		document
 			.addEventListener(
@@ -33,6 +37,11 @@ export const _KEYEVENT_MASTER = {
 			.removeEventListener(
 			_EVENT_KEYDOWN,
 			_KEYEVENT_SP.keydown_start);
+		_SP_CONTROLLER._sp_main_center
+			.removeEventListener(
+				_EVENT_KEYDOWN,
+				_KEYEVENT_SP.keymove_start_controller);
+
 	}else{
 		document
 			.removeEventListener(
@@ -253,34 +262,27 @@ export const _KEYEVENT_MASTER = {
 //==============================================================
 export const _KEYEVENT = {
 'keydown_start':function(e){
+	if (e.key === 'ArrowUp' || e.key === 'Up') {
+		_XPD._SET_DRAW_START_SELECT(-1);
+	}
+	if (e.key === 'ArrowDown' || e.key === 'Down') {
+		_XPD._SET_DRAW_START_SELECT(1);
+	}
 	if(e.key==='S'||e.key==='s'){
-// 		document
-// 			.querySelector('#game_start_wrapper .text')
-// 			.classList.add('on');
-// 		document
-// 			.querySelector('#game_start_wrapper .text_loading')
-// 			.classList.add('on');
-
-// 		//メイン画像を読み込んでステージセレクトに遷移
-// 		_DRAW_INIT(_CANVAS_IMGS,_DRAW_STAGE_SELECT);
-// //		_GAME._setPlay(_CANVAS_AUDIOS['playerset']);
 		_XPD._DRAW_GAMESTART();
-
 	}
 },//keydown_start
 
 'keydown_gameclear':function(e){
 	if(e.key==='R'||e.key==='r'){
-		_DRAW_STOP_PLAYERS_SHOTS();
-		_DRAW_RESET_OBJECT();
-		_DRAW_INIT_OBJECT();
+		_XPD._DRAW_RESET_OBJECT();
+		_XPD._DRAW_GAMESTART();
 		return false;
 	}
 
 	if(e.key==='S'||e.key==='s'){
-		_DRAW_STOP_PLAYERS_SHOTS();
-		_DRAW_RESET_OBJECT();
-		_DRAW_STAGE_SELECT();
+		_XPD._DRAW_RESET_OBJECT();
+		_XPD._DRAW_START();
 		return false;
 	}
 
@@ -325,6 +327,7 @@ export const _KEYEVENT = {
 	}
 	if(e.key==='S'||e.key==='s'){
 		_XPD._DRAW_RESET_OBJECT();
+		_XPD._DRAW_START();
 	}
 	if(e.key==='P'||e.key==='p'){
 		_XPD._DRAW_SWITCH();
@@ -339,6 +342,7 @@ export const _KEYEVENT = {
 	}
 	if(e.key==='S'||e.key==='s'){
 		_XPD._DRAW_RESET_OBJECT();
+		_XPD._DRAW_START();
 	}
 	if(e.key==='P'||e.key==='p'){
 		_XPD._DRAW_SWITCH();
@@ -402,20 +406,30 @@ export const _KEYEVENT_SP = {
 
 	_XPD._DRAW_GAMESTART();
 },//keydown_start
+'keymove_start_controller': function (e) {
+	e.preventDefault(); // タッチによる画面スクロールを止める
+	let _r=_SP_CONTROLLER._get_st(e);
+	if(_r===false){return;}
+	if(_r===_SP_CONTROLLER._DEF_DIR._U){
+		_XPD._SET_DRAW_START_SELECT(-1);
+	}
+	if(_r===_SP_CONTROLLER._DEF_DIR._D){
+		_XPD._SET_DRAW_START_SELECT(1);
+	}
+
+}, //keymove_start_controller
 
 //=========================
 // KEYDOWN GAME CLEAR
 //=========================
 'keydown_gameclear_r':function(e){
-	_DRAW_STOP_PLAYERS_SHOTS();
-	_DRAW_RESET_OBJECT();
-	_DRAW_INIT_OBJECT();
+	_XPD._DRAW_RESET_OBJECT();
+	_XPD._DRAW_GAMESTART();
 	return false;
 },//keydown_gameclear_r
 'keydown_gameclear_s':function(e){
-	_DRAW_STOP_PLAYERS_SHOTS();
-	_DRAW_RESET_OBJECT();
-	_DRAW_INIT_OBJECT();
+	_XPD._DRAW_RESET_OBJECT();
+	_XPD._DRAW_START();
 	return false;
 },//keydown_gameclear_s
 'keydown_gameclear_p':function(e){
@@ -436,6 +450,7 @@ export const _KEYEVENT_SP = {
 },
 'keydown_gameover_s':function(e){
 	_XPD._DRAW_RESET_OBJECT();
+	_XPD._DRAW_START();
 },//keydown_gameover_s
 'keydown_gameover_p':function(e){
 	_XPD._DRAW_SWITCH();
@@ -485,6 +500,7 @@ export const _KEYEVENT_SP = {
 },//keydown_game_r
 'keydown_game_s':function(e){
 	_XPD._DRAW_RESET_OBJECT();
+	_XPD._DRAW_START();
 },//keydown_game_s
 'keydown_game_p':function(e){
 	_XPD._DRAW_SWITCH();
@@ -562,34 +578,22 @@ export const _SP_CONTROLLER = {
 	//コントローラーの表示処理
 	//=========================
 	_keymove_sp_main(e){
-		let _this=_SP_CONTROLLER;
+		let _this = _SP_CONTROLLER;
 		//コントローラ、touchmove表示定義
 		_this._SP_CONTROLLER_SETINTERVAL=true;
-		let _x,_y;
-
 		//sp_mainの相対座標をセット
 		_this._set_sp_main_movePoint(e);
-		// let _tr=_SP_CONTROLLER._sp_main.getBoundingClientRect();
-
-		// for(let _i=0;_i<e.touches.length;_i++){
-		// 	//マルチタップから
-		// 	//自身のタッチ箇所のみ設定
-		// 	if(_SP_CONTROLLER._sp_main_center===e.touches[_i].target){
-		// 		_x=e.touches[_i].clientX-_tr.left;
-		// 		_y=e.touches[_i].clientY-_tr.top;
-		// 	}
-		// }
 
 		//子要素の中心点設定
 		let _c1_x=_this.x-(parseInt(window.getComputedStyle(_this._sp_main_center).width)/2),
 			_c1_y=_this.y-(parseInt(window.getComputedStyle(_this._sp_main_center).height)/2)
-		_SP_CONTROLLER._draw_sp_main({obj:e,x:_c1_x,y:_c1_y});
+		_this._draw_sp_main({obj:e,x:_c1_x,y:_c1_y});
 
 		e.stopPropagation();
 		e.preventDefault();
 	},
 	_keyup_sp_main(e){
-		let _this=_SP_CONTROLLER;
+		let _this = _SP_CONTROLLER;
 		//コントローラ、touchend表示定義
 		_this._SP_CONTROLLER_SETINTERVAL=false;
 		e.target.style.top="";
@@ -630,8 +634,8 @@ export const _SP_CONTROLLER = {
 		let _d=Math.sqrt(
 			Math.pow(_dx,2)+Math.pow(_dy,2)
 		);
-		if(_d<10){return false;}
-//		console.log('_d:::'+_d);
+		if(_d<5){return false;}
+		console.log('_d:::'+_d);
 		let _a=parseInt(Math.atan2(_dy,_dx)*180/Math.PI);
 //		console.log('_a:::'+_a);
 		
