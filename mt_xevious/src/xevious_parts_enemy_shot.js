@@ -9,8 +9,10 @@ import * as _XPPM from './xevious_parts_playermain';
 import * as _XMP from './xevious_map';
 
 export const _PARTS_ENEMYSHOT={
+	_difficult:0,
 	_enemyshot:new Array(),
-	_init(){//暫定
+	_init(_num){
+		this._difficult=_num;
 	},
 	_reset(){
 		let _this = this;
@@ -92,7 +94,7 @@ class GameObject_ENEMYSHOT{
 		_this.aniItv=_p.aniItv||5;//アニメーション間隔
 		_this.basePoint=_p.basePoint||1;
 
-		_this.speed=3;//定義：発射スピード
+		_this.speed = _PARTS_ENEMYSHOT._difficult+3; //定義：発射スピード
 		_this.rad=_p.rad||Math.atan2((_this.ty-_this.y),(_this.tx-_this.x));//ラジアン
 		_this.sx=Math.cos(_this.rad);//単位x
 		_this.sy=Math.sin(_this.rad);//単位y
