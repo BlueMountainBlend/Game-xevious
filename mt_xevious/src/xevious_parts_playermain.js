@@ -603,8 +603,8 @@ class GameObject_SHOTS_MISSILE
 			//ターゲット画像
 			_GAME_COMMON._setDrawImage({
 				img: _t._img_target,
-				x: _t.x_target,
-				y: _t.y_target,
+				x: _t.x_target-2,
+				y: _t.y_target+7,
 				width: _t._img_target.width,
 				height: _t._img_target.height,
 				basePoint:1
@@ -629,7 +629,7 @@ class GameObject_SHOTS_MISSILE
 
 			if(!_t._shot_alive){
 				_t.x_target = _p.x;
-				_t.y_target = _p.y;
+				_t.y_target = _p.y-15;
 			}
 			if (_t.x_target !== null && _t.y_target !== null) {
 				_t.y_target=_XMP._MAP._getY(_t.y_target);
