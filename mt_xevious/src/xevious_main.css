@@ -261,6 +261,13 @@ body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.a::before {
 	background-size: cover;
 	background-position: 0px 0px;
 }
+body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.auto::before {
+	background: none;
+	content: 'auto';
+	position: absolute;
+	left: -5px;
+	top: 2px;
+}
 
 /********
 iPad
@@ -390,6 +397,13 @@ iPhoneX
 		height: 60px;
 		width: 60px;
 	}
+
+	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.auto {
+		right: 175px;
+		bottom: 0px;
+		height: 50px;
+		width: 50px;
+	}
 }
 
 /********
@@ -445,6 +459,13 @@ iPhone 5.5 4.7inch
 		bottom: 30px;
 		height: 70px;
 		width: 70px;
+	}
+
+	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.auto {
+		right: 185px;
+		bottom: 0px;
+		height: 50px;
+		width: 50px;
 	}
 
 }

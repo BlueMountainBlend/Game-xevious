@@ -121,6 +121,11 @@ export const _PARTS_PLAYERMAIN={
 	_control_start_shots(_type){
 		let _this = this;
 		if(_this._shot_interval!==null){return;}
+		//プレー一時停止の場合、ショットを停止させる
+		if (_XPD._IS_DRAW_STOP()) {
+			_this._control_stop_shots();
+			return;
+		}
 
 		let _date=new Date();
 		const _loop=()=>{
@@ -152,10 +157,15 @@ export const _PARTS_PLAYERMAIN={
 	_control_start_missile_shots(){
 		let _this = this;
 		if(_this._shot_missile_interval!==null){return;}
+		//プレー一時停止の場合、ショットを停止させる
+		if (_XPD._IS_DRAW_STOP()) {
+			_this._control_stop_missile_shots();
+			return;
+		}
 
 		let _date=new Date();
 		const _loop=()=>{
-			_this._shot_missile_interval= window.requestAnimationFrame(_loop);
+			_this._shot_missile_interval = window.requestAnimationFrame(_loop);
 			_this._shot_missile_times =
 				(_this._shot_missile_times > 10)
 					? _this._shot_missile_times
@@ -208,7 +218,7 @@ export const _PARTS_PLAYERMAIN={
 			if(_s._shot_alive){continue;}
 			//ショット中は、ショットを有効にしない
 			_s._shot=true;
-			_GAME_COMMON._setPlay(_XC._CANVAS_AUDIOS['shot']);
+			_XPD._DRAW_PLAYER_PLAY_SHOT();
 
 //			console.log('shot')
 
@@ -240,7 +250,8 @@ export const _PARTS_PLAYERMAIN={
 			//ショット中は、ショットを有効にしない
 			if(_sm._shot_alive){continue;}
 			_sm._shot=true;
-			_GAME_COMMON._setPlay(_XC._CANVAS_AUDIOS['shot_missile']);
+			_XPD._DRAW_PLAYER_PLAY_MISSILE_SHOT();
+//			_GAME_COMMON._setPlay(_XC._CANVAS_AUDIOS['shot_missile']);
 
 			//最初の要素（自機）のみショット音をだす
 			if(_i!==0){continue;}
