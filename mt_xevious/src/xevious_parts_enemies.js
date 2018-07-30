@@ -8,6 +8,7 @@ import _GAME_COMMON from './xevious_common';
 import * as _XC from './xevious_canvasimgs';
 import * as _XES from './xevious_parts_enemy_shot';
 import * as _XMP from './xevious_map';
+import * as _XPD from './xevious_parts_draw';
 import * as _XPO from './xevious_parts_others';
 import * as _XPPM from './xevious_parts_playermain';
 
@@ -64,6 +65,11 @@ export const _PARTS_ENEMIESMAIN={
 			'_gamestart':(_x,_y)=>{_PARTS_ENEMIESMAIN._enemies_fly.push(new ENEMY_TORKAN({x:_x,y:_y}));},
 			'_st':'',
 			'_getObj':()=>{return new ENEMY_TORKAN({})}
+		},
+		'j':{
+			'_gamestart':(_x,_y)=>{_PARTS_ENEMIESMAIN._enemies_fly.push(new ENEMY_ZOSHI({x:_x,y:_y}));},
+			'_st':'',
+			'_getObj':()=>{return new ENEMY_ZOSHI({})}
 		},
 
 		//隠れキャラクター
@@ -230,9 +236,9 @@ class GameObject_ENEMY{
 		let _this=this;
 		if(!_this.isalive()){
 			_XPO._PARTS_OTHERS._set_score(_this.getscore);
-			_GAME_COMMON._setPlay(_this.audio_collision);
+			_XPD._DRAW_PLAYER_ENEMIES(_this.audio_collision);
 		}else{
-			_GAME_COMMON._setPlay(_this.audio_alive);
+			_XPD._DRAW_PLAYER_ENEMIES(_this.audio_alive);
 		}
 	}
 	setStatus(){
@@ -379,134 +385,7 @@ class GameObject_ENEMY{
 	}
 }
 
-//編隊を管理する敵クラス
-//実体はFAN_MAINクラスのため、
-//これ自身は当たり判定等は無視
-//ただし、編隊を全て倒した時の
-//パワーカプセル表示の為に
-//座標位置は保持しておく。
-//キャンバス内から登場させると、
-//編隊の表示間隔がずれる
-export class ENEMY_FAN extends GameObject_ENEMY{
-	constructor(_p){
-		super({
-			img:_CANVAS_IMGS['enemy_fan'].obj,
-			x:_p.x,
-			y:_p.y,
-			imgPos:[0,25,50,75,100,125,150,175],
-			aniItv:5,
-			width:25,
-			height:25,
-			direct:_p.direct
-		});
-		let _this=this;
-		_this.haspc=true;
-		_this.parts=[];//スタンバイ完了後に設定
-		_this.is_ignore=true;
-	}
-	move_standby(){
-		let _this=this;
-		if(_this.x>_CANVAS.width){return;}
-		_this._standby=false;
-		_this.parts=[
-			new ENEMY_FAN_MAIN({x:_this.x+_this.width*0.0,y:_this.y}),
-			new ENEMY_FAN_MAIN({x:_this.x+_this.width*0.5,y:_this.y}),
-			new ENEMY_FAN_MAIN({x:_this.x+_this.width*1.0,y:_this.y}),
-			new ENEMY_FAN_MAIN({x:_this.x+_this.width*1.5,y:_this.y}),
-			new ENEMY_FAN_MAIN({x:_this.x+_this.width*2.0,y:_this.y}),
-			new ENEMY_FAN_MAIN({x:_this.x+_this.width*2.5,y:_this.y}),
-		];
-		//敵クラスに追加
-		for(let _i=0;_i<_this.parts.length;_i++){
-			_ENEMIES.push(_this.parts[_i]);
-		}
-	}
-	setDrawImage(){}
-	moveSet(){
-		let _this=this;
-		//表示
-		for(let _i=_this.parts.length-1;_i>=0;_i--){
-			let _pt=_this.parts[_i];
-			_pt.moveSet();
-			//敵を倒す度に要素を減らす。
-			if(!_pt.isalive()){
-				_this.parts.splice(_i,1);
-			}
-		}
-		if(_this.parts.length===0){
-			//キャンバスから外れたらカプセルは表示させない
-			if(_this.x<_CANVAS.width){
-				_this.showCollapes();
-			}
-			//全ての敵を倒す、あるいは自身がキャンバスから外れた場合、自身が消える
-			_this.init();
-			return;
-		}
-		//自身の座標は最後に残った敵の座標を取得する。
-		//※その座標は最終的にパワーカプセルを表示させる位置とする	
-		_this.x=_this.parts[_this.parts.length-1].x
-		_this.y=_this.parts[_this.parts.length-1].y
-//		console.log(_this.x)
-	}
-}
 
-class ENEMY_FAN_MAIN extends GameObject_ENEMY{
-    constructor(_p){
-		super({
-			img:_CANVAS_IMGS['enemy_fan'].obj,
-			x:_p.x,
-			y:_p.y,
-			imgPos:[0,25,50,75,100,125,150,175],
-			aniItv:5,
-			width:25,
-			height:25
-		});
-		let _this=this;
-		_this._status=1;
-		_this.speed=2;
-		_this.pos_y=(_p.y>250);//0:250より上 1:250より下
-		_this.change_x=false;//xの移動切替位置
-		_this.change_y=false;//yの移動切替位置
-	}
-	isCanvasOut(){
-		let _this=this;
-		//Uターンさせる動きにより、
-		//スタンバイ終了後、右画面へ消えたらキャンバス外扱い
-		return _GAME.isEnemyCanvasOut(
-			_this,{
-				up:false,
-				down:false,
-				left:true,
-				right:(_this.change_x)
-			}
-		);
-	}
-	moveSet(){
-		let _this=this;
-		_this.x=_MAP.getX(_this.x);
-		_this.y=_MAP.getY(_this.y);
-		if(!_this.isMove()){return;}
-
-		const _X_LEFT=500;//xの切替位置
-		const _Y_TOP=(_this.pos_y)?275:200;//yの切替位置
-		_this.change_x=_this.change_x||(_this.x<_X_LEFT);
-		_this.x+=(_this.change_x)
-			?_this.speed+_MAP.getBackGroundSpeed()
-			:_this.speed*-1;
-		_this.change_y=_this.change_y
-				||(_this.pos_y&&_this.y<_Y_TOP||!_this.pos_y&&_this.y>_Y_TOP);
-		_this.y+=(()=>{
-			if(!_this.change_x){return 0;}
-			if(_this.change_y){return 0;}
-			return (_this.pos_y)?_this.speed*-1:_this.speed;
-		})()
-
-		_this.set_imgPos();
-		//弾の発射
-		_this.shot();
-	}
-	move(){}//親に指示させるので、ここでは無効にする
-}
 
 export class ENEMY_TOROID extends GameObject_ENEMY {
 	constructor(_p){
@@ -583,20 +462,6 @@ export class ENEMY_BACURA extends GameObject_ENEMY {
 		_this.y+=_this.speed;
 	}
 }
-
-// class ENEMY_b extends ENEMY_a{
-// 	constructor(_p){
-// 		super({
-// 			img:_CANVAS_IMGS['enemy_b'].obj,
-// 			x:_p.x,
-// 			y:_p.y,
-// 			direct:_p.direct
-// 		});
-//         let _this=this;
-// 		_this.haspc=true;
-// 	}
-// }
-
 
 export class ENEMY_BARRA extends GameObject_ENEMY {
 	constructor(_p){
@@ -778,6 +643,8 @@ export class ENEMY_ZAKATO extends GameObject_ENEMY {
 		_this.rad = 0;
 		_this.speedx = 1;
 		_this.speedy = 3;
+
+		_this._scc = 0;//self-collision-count 自爆カウント
 	}
 	shot(){}
 	showCollapes() {
@@ -839,6 +706,7 @@ export class ENEMY_ZAKATO extends GameObject_ENEMY {
 	moveSet(){
 		let _this=this;
 
+		if(_this._scc>50){_this._status=0;}
 		if (!_this.isalive()) {
 			_XES._PARTS_ENEMYSHOT._set_enemyshot(this);
 			return;
@@ -846,8 +714,44 @@ export class ENEMY_ZAKATO extends GameObject_ENEMY {
 		let _o = _XPPM._PARTS_PLAYERMAIN._get_players_location;
 		_this.x+=_this.speedx;
 		_this.y+=_this.speedy;
+		_this._scc++;
 	}
 }
+
+export class ENEMY_ZOSHI extends GameObject_ENEMY {
+	constructor(_p){
+		super({
+			img:_p.img||_XC._CANVAS_IMGS.xevious_enemy_zoshi.obj,
+			x:_p.x,
+			y:_p.y,
+			imgPos:[0,30,60,90,120,150],
+			width:30,
+			height:30,
+			enemy_type:1
+		});
+		let _this=this;
+		_this.getscore = 100; //倒した時のスコア
+		_this._collision_type = 't3';
+
+
+		let _o=_XPPM._PARTS_PLAYERMAIN._get_players_location();
+		if(_o===undefined){return;}
+		_this.rad=Math.atan2((_o.y-_this.y),(_o.x-_this.x));
+		_this.speedx = Math.cos(_this.rad) * 3;
+		_this.speedy = Math.sin(_this.rad) * 3;
+	}
+	shot(){}
+	moveSet(){
+		let _this=this;
+		if (!_this.isalive()) {
+			return;
+		}
+		_this.x+=_this.speedx;
+		_this.y+=_this.speedy;
+	}
+}
+
+
 
 export class ENEMY_TORKAN extends GameObject_ENEMY {
 	constructor(_p) {

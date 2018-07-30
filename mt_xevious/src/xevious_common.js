@@ -119,6 +119,7 @@ const _GAME_COMMON = {
 	_audio_buffer_loader:null,
 	_audio_now_obj_bg:null,//バックグラウンド現在再生用
 	_audio_context_source_bg:null,//バックグラウンド再生用
+	_audio_settimeout:null,
 	_is_audio_context_source_bg:false,//バックグラウンド再生中判別フラグ
 
 	_IS_SQ_COL:0,
@@ -509,42 +510,58 @@ const _GAME_COMMON = {
 		}//_i
 		return {ret:_this._IS_SQ_NOTCOL,val:_this._canvas.width};
 	},
-	_setPlay(_obj){
+	_setPlay(_obj,_time){
+		//_obj:再生させたい音声オブジェクト
+		//_time:再生完了時間（ms）
 		let _this = this;
-		if(_obj===null||_obj===undefined){return;}
-	
-		var _s=_this._audio_context.createBufferSource();
-		_s.buffer=_obj.buf;
-		_s.loop=false;
-		_s.connect(_this._audio_context.destination);
-		_s.start(0);
+		return new Promise((_res, _rej) => {
+			if(_obj===null||_obj===undefined){return;}
 		
+			var _s=_this._audio_context.createBufferSource();
+			_s.buffer=_obj.buf;
+			_s.loop=false;
+			_s.connect(_this._audio_context.destination);
+			_s.start(0);
+			if(_time===undefined){return;}
+			_this._audio_settimeout=setTimeout(()=>{_res();},_time);
+		});
 	},
-	_setPlayOnBG(_obj,_loop){
+	_setPlayOnBG(_obj,_loop,_time){
+		//_obj:再生させたい音声オブジェクト
+		//_loop:ループ可否
+		//_time:再生完了時間（ms）
 		let _this = this;
-		//バックグラウンド用再生
-		if(_obj===null||_obj===undefined){return;}
-		
-		if(this._is_audio_context_source_bg===true){
-			this._audio_context_source_bg.stop();
-			this._is_audio_context_source_bg=false;
-		}
-		let _t = _this._audio_context.createBufferSource();
-		_t.buffer=_obj.buf;
-		this._audio_now_obj_bg=_obj;//バッファの一時保存用
-		_t.loop=(_loop===false)?false:true;
-		_t.loopStart=0;
-		_t.connect(_this._audio_context.destination);
-		_t.start(0,0);
-		
-		this._audio_context_source_bg=_t;
-		this._is_audio_context_source_bg=true;
+		return new Promise((_res,_rej)=>{
+			//バックグラウンド用再生
+			if(_obj===null||_obj===undefined){return;}
+			
+			if(_this._is_audio_context_source_bg===true){
+				_this._audio_context_source_bg.stop();
+				_this._is_audio_context_source_bg=false;
+			}
+			let _t = _this._audio_context.createBufferSource();
+			_t.buffer=_obj.buf;
+			_this._audio_now_obj_bg=_obj;//バッファの一時保存用
+			_t.loop=(_loop===false)?false:true;
+			_t.loopStart=0;
+			_t.connect(_this._audio_context.destination);
+			_t.start(0,0);
+			
+			_this._audio_context_source_bg=_t;
+			_this._is_audio_context_source_bg=true;
+
+			if(_time===undefined){return;}
+			_this._audio_settimeout=setTimeout(()=>{_res();},_time);
+		});
+
 	},
 	_setStopOnBG(){
 		//バックグラウンド用停止
-		if(!this._is_audio_context_source_bg){return;}
-		this._audio_context_source_bg.stop();
-		this._is_audio_context_source_bg=false;
+		let _this = this;
+		if(!_this._is_audio_context_source_bg){return;}
+		_this._audio_context_source_bg.stop();
+		_this._is_audio_context_source_bg=false;
+		clearTimeout(_this._audio_settimeout);
 	},
 
 };

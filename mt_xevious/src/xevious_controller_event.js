@@ -72,6 +72,10 @@ export const _KEYEVENT_MASTER = {
 			.addEventListener(
 			_EVENT_KEYDOWN,
 			_KEYEVENT_SP.keydown_game_a);
+		_SP_CONTROLLER._sp_bt_auto
+			.addEventListener(
+				_EVENT_KEYDOWN,
+				_KEYEVENT_SP.keydown_game_auto);
 		_SP_CONTROLLER._sp_main_center
 			.addEventListener(
 			_EVENT_KEYDOWN,
@@ -129,6 +133,10 @@ export const _KEYEVENT_MASTER = {
 			.removeEventListener(
 			_EVENT_KEYDOWN,
 			_KEYEVENT_SP.keydown_game_a);
+		_SP_CONTROLLER._sp_bt_auto
+			.removeEventListener(
+			_EVENT_KEYDOWN,
+			_KEYEVENT_SP.keydown_game_auto);
 		_SP_CONTROLLER._sp_main_center
 			.removeEventListener(
 			_EVENT_KEYDOWN,
@@ -341,8 +349,8 @@ export const _KEYEVENT = {
 		_XPD._DRAW_GAMESTART();
 	}
 	if(e.key==='S'||e.key==='s'){
-		_XPD._DRAW_RESET_OBJECT();
-		_XPD._DRAW_START();
+		// _XPD._DRAW_RESET_OBJECT();
+		// _XPD._DRAW_START();
 	}
 	if(e.key==='P'||e.key==='p'){
 		_XPD._DRAW_SWITCH();
@@ -499,8 +507,8 @@ export const _KEYEVENT_SP = {
 	_XPD._DRAW_GAMESTART();
 },//keydown_game_r
 'keydown_game_s':function(e){
-	_XPD._DRAW_RESET_OBJECT();
-	_XPD._DRAW_START();
+	// _XPD._DRAW_RESET_OBJECT();
+	// _XPD._DRAW_START();
 },//keydown_game_s
 'keydown_game_p':function(e){
 	_XPD._DRAW_SWITCH();
@@ -508,17 +516,25 @@ export const _KEYEVENT_SP = {
 
 'keydown_game_a':function(e){
 	_XPPM._PARTS_PLAYERMAIN._control_start_shots();
-	_GAME_COMMON._setPlay(_XC._CANVAS_AUDIOS['shot']);
 },//keydown_game_a
 'keydown_game_b':function(e){
 	_XPPM._PARTS_PLAYERMAIN._control_start_missile_shots();
 },//keydown_game_b
+'keydown_game_auto': function (e) {
+	if (_SP_CONTROLLER._sp_bt_auto.classList.value.indexOf('auto on')===-1) {
+		_XPPM._PARTS_PLAYERMAIN._control_stop_shots();
+		_XPPM._PARTS_PLAYERMAIN._control_stop_missile_shots();
+	}else{
+		_XPPM._PARTS_PLAYERMAIN._control_start_shots();
+		_XPPM._PARTS_PLAYERMAIN._control_start_missile_shots();
+	}
+}, //keydown_game_auto
+
 'keyup_game_a':function(e){
 	_XPPM._PARTS_PLAYERMAIN._control_stop_shots();
 },//keyup_game_a
 'keyup_game_b': function (e) {
 	_XPPM._PARTS_PLAYERMAIN._control_stop_missile_shots();
-	return false;
 } //keyup_game_b
 
 }//_KEYEVENT_SP
@@ -541,6 +557,7 @@ export const _SP_CONTROLLER = {
 	_sp_bt_s:new Object(),
 	_sp_bt_b:new Object(),
 	_sp_bt_a:new Object(),
+	_sp_bt_auto: new Object(),
 	_DEF_DIR:{//向き定義
 		_U:0,//上
 		_D:1,//下
@@ -603,15 +620,29 @@ export const _SP_CONTROLLER = {
 	},
 	_keydown_sp_bts(e){
 		//ボタン用、touchdown表示定義
-		e.currentTarget.classList.add('on');
 		e.stopPropagation();
 		e.preventDefault();
+
+		if (e.target.classList.value.indexOf('auto') !== -1) {
+			if (e.target.classList.value.indexOf('auto on') !== -1){
+				e.currentTarget.classList.remove('on');
+			}else{
+				e.currentTarget.classList.add('on');
+			}
+			return;
+		}
+		e.currentTarget.classList.add('on');
 	},
 	_keyup_sp_bts(e){
 		//ボタン用、touchend表示定義
-		e.currentTarget.classList.remove('on');
 		e.stopPropagation();
 		e.preventDefault();
+
+		if (e.target.classList.value.indexOf('auto') !== -1) {return;}
+		e.currentTarget.classList.remove('on');
+	},
+	sp_bts_reset(){
+
 	},
 	//=========================
 	//自機操作制御
@@ -635,7 +666,6 @@ export const _SP_CONTROLLER = {
 			Math.pow(_dx,2)+Math.pow(_dy,2)
 		);
 		if(_d<5){return false;}
-		console.log('_d:::'+_d);
 		let _a=parseInt(Math.atan2(_dy,_dx)*180/Math.PI);
 //		console.log('_a:::'+_a);
 		
@@ -656,6 +686,7 @@ export const _SP_CONTROLLER = {
 		// 		.querySelector('.sp_controller_main_center');
 		// _c1.style.left='';
 		// _c1.style.top='';
+		this._sp_bt_auto.classList.remove('on');
 	},//_set_reset
 	//以下は初期処理
 	_set_obj(){
@@ -675,6 +706,8 @@ export const _SP_CONTROLLER = {
 			document.querySelector('.sp_controller_bt.b');
 		this._sp_bt_a=
 			document.querySelector('.sp_controller_bt.a');
+		this._sp_bt_auto =
+			document.querySelector('.sp_controller_bt.auto');
 		
 		//イベント定義
 		this._sp_main_center.addEventListener(_EVENT_KEYMOVE,this._keymove_sp_main);

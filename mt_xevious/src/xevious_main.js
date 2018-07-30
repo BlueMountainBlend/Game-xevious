@@ -17,7 +17,6 @@ import * as _XPM from './xevious_map';
 //hello();
 //a.socket_init();
 
-let _P=new Object();
 
 //===================================================
 //	JAVASCRIPT START

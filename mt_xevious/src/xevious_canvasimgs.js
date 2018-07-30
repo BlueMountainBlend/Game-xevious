@@ -69,6 +69,11 @@ export const _CANVAS_IMGS={
 		rate: 1.00,
 		obj: new Image()
 	},
+	'xevious_enemy_zoshi': {
+		src: 'images/xevious_enemy_zoshi.png',
+		rate: 1.00,
+		obj: new Image()
+	},
 	'xevious_enemy_derota': {
 		src: 'images/xevious_enemy_derota.png',
 		rate: 1.00,
