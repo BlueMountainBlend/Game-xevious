@@ -1,5 +1,5 @@
 const path = require('path');
-const _cwp = require('copy-webpack-plugin');
+const DEBUG = !process.argv.includes('--release');
 
 // const config = {
 //     plugins: [
@@ -12,8 +12,7 @@ const _cwp = require('copy-webpack-plugin');
 
 module.exports = {
     // モードの設定、v4系以降はmodeを指定しないと、webpack実行時に警告が出る
-//    mode: 'development', //'development',//'production',
-    mode: 'production', //'development',//'production',
+    mode: (DEBUG) ? 'development' : 'production',
     // エントリーポイントの設定
     entry: './src/xevious_main.js',
     // 出力の設定
@@ -23,8 +22,7 @@ module.exports = {
         // 出力先のパス（v2系以降は絶対パスを指定する必要がある）
         path: path.join(__dirname, 'dist')
     },
-    devtool: false,//'eval-source-map',
-//    devtool: 'eval-source-map', //'eval-source-map',
+    devtool: (DEBUG) ? 'eval-source-map':false,
     devServer: {
         contentBase: './dist'
     },

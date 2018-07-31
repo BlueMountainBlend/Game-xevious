@@ -148,7 +148,7 @@ export const _DRAW_SWITCH = () => {
 	} else {
 		//描画・コントローラーのショットを再開
 		_DRAW();
-		if (_XCE._SP_CONTROLLER._sp_bt_auto.classList.value.indexOf('auto on') !== -1) {
+		if (_XCE._SP_CONTROLLER._is_auto()) {
 			//auto指定時は連射を再開
 			_XPPM._PARTS_PLAYERMAIN._control_start_shots();
 			_XPPM._PARTS_PLAYERMAIN._control_start_missile_shots();
