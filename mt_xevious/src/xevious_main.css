@@ -18,6 +18,7 @@ html,body{
 	-webkit-user-select:none;  /* Chrome or Safari */
     user-select:none;
 }
+body.on{display:block !important;}
 body::before {
     background-color: rgba(0,0,0,0.6);
     left: 0;
@@ -277,7 +278,7 @@ iPad
 		display: flex;
 	}
 	body.sp section#game_wrapper #game {
-		height: 100%;
+		height: 80%;
 		width: auto;
 	}
 
@@ -304,21 +305,21 @@ iPad
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.r {
 		right: 345px;
-		bottom: 10px;
+		bottom: 130px;
 		height: 50px;
 		width: 50px;
 	}
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.p {
 		right: 290px;
-		bottom: 10px;
+		bottom: 130px;
 		height: 50px;
 		width: 50px;
 	}
 
 	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.s {
 		right: 235px;
-		bottom: 10px;
+		bottom: 130px;
 		height: 50px;
 		width: 50px;
 	}
@@ -336,6 +337,14 @@ iPad
 		height: 100px;
 		width: 100px;
 	}
+
+	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.auto {
+		right: 230px;
+		bottom: 50px;
+		height: 50px;
+		width: 50px;
+	}
+
 }
 
 /********

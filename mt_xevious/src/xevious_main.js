@@ -25,11 +25,14 @@ window.addEventListener('load', () => {
     _GAME_COMMON._init({_pu:_PK_URL});
     //CANVASに画像・音声読込
     _GAME_COMMON._init_canvasimgs(_XC).then(function(){
+		document.body.classList.add('on');
+		document.querySelector('#game_wrapper').classList.add('on');
         _XPM._MAP.init({f:_XPD._DRAW_START});
     });
 
     if (_GAME_COMMON._issp) {
         document.querySelector('body').classList.add('sp');
+		document.querySelector('#sp_controller').classList.add('on');
         _XCE._SP_CONTROLLER._set_obj();
     }
 

@@ -207,7 +207,7 @@ const _GAME_COMMON = {
 		_this._canvas = document.getElementById('game');
 		_this._context = _this._canvas.getContext('2d');
 		_this._audio_context = new(window.AudioContext || window.webkitAudioContext)();
-		_this._isdebug = (_p._pu.query['debug'] === 'true') ? true : false;
+		_this._isdebug = (_p._pu.query['debug'] === 'true');
 		_this._enemy_difficult = _p._pu.query['ed'] || 0;
 
 	},

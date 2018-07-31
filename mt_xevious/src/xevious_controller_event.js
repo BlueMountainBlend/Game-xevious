@@ -515,25 +515,29 @@ export const _KEYEVENT_SP = {
 },//keydown_game_p
 
 'keydown_game_a':function(e){
+	if(_SP_CONTROLLER._is_auto()){return;}
 	_XPPM._PARTS_PLAYERMAIN._control_start_shots();
 },//keydown_game_a
 'keydown_game_b':function(e){
+	if(_SP_CONTROLLER._is_auto()){return;}
 	_XPPM._PARTS_PLAYERMAIN._control_start_missile_shots();
 },//keydown_game_b
 'keydown_game_auto': function (e) {
-	if (_SP_CONTROLLER._sp_bt_auto.classList.value.indexOf('auto on')===-1) {
-		_XPPM._PARTS_PLAYERMAIN._control_stop_shots();
-		_XPPM._PARTS_PLAYERMAIN._control_stop_missile_shots();
-	}else{
+	if (_SP_CONTROLLER._is_auto()) {
 		_XPPM._PARTS_PLAYERMAIN._control_start_shots();
 		_XPPM._PARTS_PLAYERMAIN._control_start_missile_shots();
+	}else{
+		_XPPM._PARTS_PLAYERMAIN._control_stop_shots();
+		_XPPM._PARTS_PLAYERMAIN._control_stop_missile_shots();
 	}
 }, //keydown_game_auto
 
 'keyup_game_a':function(e){
+	if(_SP_CONTROLLER._is_auto()){return;}
 	_XPPM._PARTS_PLAYERMAIN._control_stop_shots();
 },//keyup_game_a
 'keyup_game_b': function (e) {
+	if(_SP_CONTROLLER._is_auto()){return;}
 	_XPPM._PARTS_PLAYERMAIN._control_stop_missile_shots();
 } //keyup_game_b
 
@@ -558,6 +562,7 @@ export const _SP_CONTROLLER = {
 	_sp_bt_b:new Object(),
 	_sp_bt_a:new Object(),
 	_sp_bt_auto: new Object(),
+	_is_auto: function(){ return _SP_CONTROLLER._sp_bt_auto.classList.value.indexOf('auto on') !== -1 },
 	_DEF_DIR:{//向き定義
 		_U:0,//上
 		_D:1,//下
