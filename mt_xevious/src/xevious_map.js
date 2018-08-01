@@ -30,6 +30,10 @@ export const _MAP={
 		let _this = this;
 		return _y + (_this._background_speed * 2);
 	},
+	_getYPause(_y){
+		let _this = this;
+		return _y - (_this._background_speed * 2);
+	},
 	_set_gamestart(){
 		let _this=this;
 		for(let _i=0;_i<_this._map.length;_i++){

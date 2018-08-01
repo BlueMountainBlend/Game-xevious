@@ -535,4 +535,11 @@ iPhone 4.0inch
 		width: 60px;
 	}
 
+	body.sp section#sp_controller #sp_controller_inner .sp_controller_bt.auto {
+		right: 145px;
+		bottom: 0px;
+		height: 40px;
+		width: 40px;
+	}
+
 }

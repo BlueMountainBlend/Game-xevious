@@ -14,11 +14,15 @@ import * as _XPPM from './xevious_parts_playermain';
 
 
 export const _PARTS_ENEMIESMAIN={
-	_enemies_field:new Array(),
+	_difficult: 0,
+	_speed: 1,
+ 	_enemies_field:new Array(),
 	_enemies_fly:new Array(),
 	_shot_rate:0.001,
 	_init(_num){
-		this._shot_rate=0.001*(_num+1);
+		this._shot_rate=(_GAME_COMMON._getDifficult(_num))._shot_rate;
+		this._difficult=_num;
+		this._speed=(_GAME_COMMON._getDifficult(_num))._enemy_speed;
 	},
 	_map_def:{
 		'a':{
@@ -158,7 +162,7 @@ class GameObject_ENEMY{
 		_this.alpha=1;//表示透明度（1〜0。1:表示、0:非表示）
 		_this._c=0;//アニメーションカウント
 
-		_this.speed=1;//敵のスピード
+		_this.speed = (_PARTS_ENEMIESMAIN._speed || 1); //敵のスピード
 		_this.getscore=30;//倒した時のスコア
 		
 		_this._standby=true;//スタンバイ状態
@@ -256,7 +260,7 @@ class GameObject_ENEMY{
 	shot(){
 		//キャンバス内でショットさせる
 		if(_GAME_COMMON.isCanvasOut(this)){return;}
-		if(Math.random()>=_PARTS_ENEMIESMAIN._shot_rate){return;}
+		if(_PARTS_ENEMIESMAIN._shot_rate<Math.random()){return;}
 		_XES._PARTS_ENEMYSHOT._set_enemyshot(this);
 
 // 		if(Math.random()>=
@@ -400,7 +404,7 @@ export class ENEMY_TOROID extends GameObject_ENEMY {
 		let _this=this;
 		_this.turnflag = false;//自機と同じxになったら切り替える
 		_this.speedx = 0;
-		_this.speedy = 1;
+		_this.speedy = _PARTS_ENEMIESMAIN._speed;
 	}
 	move_standby(){
 		let _this = this;
@@ -453,13 +457,44 @@ export class ENEMY_BACURA extends GameObject_ENEMY {
 		});
 		let _this=this;
 //		_this.is_able_collision = false;
-		_this.speed = 1;
+		_this.speed = _PARTS_ENEMIESMAIN._speed;
 		_this._status = 255;
+		_this._rad = 0;
+		_this._step1 = false;
+		_this._step2 = false;
 	}
-	shot(){}
 	moveSet(){
 		let _this=this;
-		_this.y+=_this.speed;
+		if (_PARTS_ENEMIESMAIN._difficult<1){
+			_this.y += _this.speed;
+			_this.y = _XMP._MAP._getY(_this.y);
+			return;
+		}
+
+		if(_this.y>250&&!_this._step1&&!_this._step2){_this._step1=true;}
+		if(_this._step1&&!_this._step2){
+			_this.speed = (Math.cos(_this._rad) * _PARTS_ENEMIESMAIN._speed);
+			_this._rad+=0.02;
+		}
+		if(_this._rad>2*Math.PI){
+			_this._step2=true;
+		}
+		if(_this._step2){
+			_this.speed = _PARTS_ENEMIESMAIN._speed;
+		}
+		_this.y += _this.speed;
+	}
+	move(){
+		//敵の処理メイン
+		//原則継承はしない
+		let _this=this;
+		_this.x = _XMP._MAP._getX(_this.x);
+		if(!_this.isMove()){
+			_this.y = _XMP._MAP._getY(_this.y);
+			return;
+		}
+		_this.moveSet();
+		_this.set_imgPos();
 	}
 }
 
@@ -641,8 +676,8 @@ export class ENEMY_ZAKATO extends GameObject_ENEMY {
 		_this.getscore = 200; //倒した時のスコア
 		_this._collision_type = 't3';
 		_this.rad = 0;
-		_this.speedx = 1;
-		_this.speedy = 3;
+		_this.speedx = _PARTS_ENEMIESMAIN._speed;
+		_this.speedy = _PARTS_ENEMIESMAIN._speed + 3;
 
 		_this._scc = 0;//self-collision-count 自爆カウント
 	}
@@ -697,8 +732,8 @@ export class ENEMY_ZAKATO extends GameObject_ENEMY {
 			let _o=_XPPM._PARTS_PLAYERMAIN._get_players_location();
 			if(_o===undefined){return;}
 			_this.rad=Math.atan2((_o.y-_this.y),(_o.x-_this.x));
-			_this.speedx=Math.cos(_this.rad)*2;
-			_this.speedy=Math.sin(_this.rad)*2;
+			_this.speedx = Math.cos(_this.rad) * 2 * _PARTS_ENEMIESMAIN._speed;
+			_this.speedy = Math.sin(_this.rad) * 2 * _PARTS_ENEMIESMAIN._speed;
 		}
 //		_this.setDrawImage();
 		_this.set_imgPos();
@@ -737,8 +772,8 @@ export class ENEMY_ZOSHI extends GameObject_ENEMY {
 		let _o=_XPPM._PARTS_PLAYERMAIN._get_players_location();
 		if(_o===undefined){return;}
 		_this.rad=Math.atan2((_o.y-_this.y),(_o.x-_this.x));
-		_this.speedx = Math.cos(_this.rad) * 3;
-		_this.speedy = Math.sin(_this.rad) * 3;
+		_this.speedx = Math.cos(_this.rad) * 3 * _PARTS_ENEMIESMAIN._speed;
+		_this.speedy = Math.sin(_this.rad) * 3 * _PARTS_ENEMIESMAIN._speed;
 	}
 	shot(){}
 	moveSet(){
@@ -769,7 +804,7 @@ export class ENEMY_TORKAN extends GameObject_ENEMY {
 		_this.getscore = 50; //倒した時のスコア
 
 		_this.init_speedx=(_p.x>_GAME_COMMON._canvas.width/2)?-1:1;
-		_this.init_speedy = 5;
+		_this.init_speedy = _PARTS_ENEMIESMAIN._speed+5;
 		_this.speedx=_this.init_speedx;
 		_this.speedy=_this.init_speedy;
 		_this.changeY=(Math.random()*400-200)+200;
@@ -952,7 +987,7 @@ export class ENEMY_ANDORGENESIS extends GameObject_ENEMY {
 			_this._count++;
 			//一定時間を超えた時
 			if(_this._count>1000){return _this.y-_this.speed*3;}
-			return _this.y-_this.speed;
+			return _XMP._MAP._getYPause(_this.y);
 		})();
 		if (_this.y + _this.height < 0) {
 			_this.init();
@@ -985,7 +1020,7 @@ export class ENEMY_ANDORGENESIS_CHILD extends GameObject_ENEMY {
 	}
 	shot(){
 		let _this = this;
-		if(Math.random()>=_PARTS_ENEMIESMAIN._shot_rate){return;}
+		if(_PARTS_ENEMIESMAIN._shot_rate<Math.random()){return;}
 		_XES._PARTS_ENEMYSHOT._set_enemyshot(_this);
 	}
 	showCollapes(_x, _y) {
@@ -999,7 +1034,6 @@ export class ENEMY_ANDORGENESIS_CHILD extends GameObject_ENEMY {
 			type: _this._collision_type
 		});
 	}
-//	setDrawImage(){console.log('d')}
 	moveSet(_p){
 		let _this=this;
 		if (!_this.isMove()) {

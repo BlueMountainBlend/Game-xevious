@@ -50,6 +50,7 @@ export const _IS_DRAW_STOP = () => {
 
 export const _DRAW = () => {
 	window.cancelAnimationFrame(_DRAW_SETINTERVAL);
+	if(_GAME_COMMON._issp){_XCE._SP_CONTROLLER._keydown_sp_auto()};
 
 	const _loop = () => {
 		_DRAW_SETINTERVAL = window.requestAnimationFrame(_loop);
@@ -190,7 +191,10 @@ export const _DRAW_PLAYER_COLLAPES = () => {
 
 export const _DRAW_RESET_OBJECT = () => {
 	_XPPM._PARTS_PLAYERMAIN._reset();
-	_XPE._PARTS_ENEMIESMAIN._reset()
+	_XPE._PARTS_ENEMIESMAIN._reset();
+	if (_IS_GAMEOVER()) {
+		_XPO._PARTS_OTHERS._reset();
+	}
 
 	_FLAG_GAMEOVER=false;
 	_COUNT_GAMEOVER=0;
@@ -243,11 +247,10 @@ export const _DRAW_START = () => {
 
 		//選択矩形表示
 		_GAME_COMMON._context.save();
-//		console.log(_start_select)
 		_GAME_COMMON._context.strokeStyle='rgba(255,255,255,1)';
 		_GAME_COMMON._context.strokeRect(100, 375+(40*_start_select), _GAME_COMMON._canvas.width-200, 30);
 		_GAME_COMMON._context.stroke();
-//		_GAME_COMMON._context.restore();
+		_GAME_COMMON._context.restore();
 		if (_c % 30 > 5 && _c % 30 < 30) {
 			_GAME_COMMON._setDrawText('PRESS S TO DECIDE', 'center', 510, 0.2);
 		}
