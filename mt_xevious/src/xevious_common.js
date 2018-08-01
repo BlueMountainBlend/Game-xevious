@@ -107,6 +107,24 @@ const _init_draw_imgs = (_obj) => {
 	});
 };
 
+const _DEF_DIFFICULT = [{
+		"_shot_rate": 0.001,
+		"_shot_speed": 0,
+		"_enemy_speed": 1
+	},
+	{
+		"_shot_rate": 0.0025,
+		"_shot_speed": 1,
+		"_enemy_speed": 2
+	},
+	{
+		"_shot_rate": 0.005,
+		"_shot_speed": 3,
+		"_enemy_speed": 3
+	}
+];
+
+
 const _GAME_COMMON = {
 	_audio_context: '',
 	_canvas: '',
@@ -563,7 +581,9 @@ const _GAME_COMMON = {
 		_this._is_audio_context_source_bg=false;
 		clearTimeout(_this._audio_settimeout);
 	},
-
+	_getDifficult(_num){
+		return _DEF_DIFFICULT[_num];
+	}
 };
 
 export default _GAME_COMMON;

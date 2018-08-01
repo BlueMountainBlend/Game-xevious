@@ -103,9 +103,6 @@ export const _KEYEVENT_MASTER = {
 			.addEventListener(
 			_EVENT_KEYUP,
 			_KEYEVENT_SP.keyend_game_controller);
-
-		_SP_CONTROLLER._set_reset();
-
 	}else{
 		document.addEventListener(
 			_EVENT_KEYUP,_KEYEVENT.keyup_game);
@@ -165,8 +162,6 @@ export const _KEYEVENT_MASTER = {
 			.removeEventListener(
 			_EVENT_KEYUP,
 			_KEYEVENT_SP.keyend_game_controller);
-		//コントローラーをリセット
-		_SP_CONTROLLER._set_reset();
 	}else{
 		document.removeEventListener(
 			_EVENT_KEYUP,_KEYEVENT.keyup_game);
@@ -523,13 +518,7 @@ export const _KEYEVENT_SP = {
 	_XPPM._PARTS_PLAYERMAIN._control_start_missile_shots();
 },//keydown_game_b
 'keydown_game_auto': function (e) {
-	if (_SP_CONTROLLER._is_auto()) {
-		_XPPM._PARTS_PLAYERMAIN._control_start_shots();
-		_XPPM._PARTS_PLAYERMAIN._control_start_missile_shots();
-	}else{
-		_XPPM._PARTS_PLAYERMAIN._control_stop_shots();
-		_XPPM._PARTS_PLAYERMAIN._control_stop_missile_shots();
-	}
+	_SP_CONTROLLER._keydown_sp_auto();
 }, //keydown_game_auto
 
 'keyup_game_a':function(e){
@@ -637,6 +626,15 @@ export const _SP_CONTROLLER = {
 			return;
 		}
 		e.currentTarget.classList.add('on');
+	},
+	_keydown_sp_auto(){
+		if (_SP_CONTROLLER._is_auto()) {
+			_XPPM._PARTS_PLAYERMAIN._control_start_shots();
+			_XPPM._PARTS_PLAYERMAIN._control_start_missile_shots();
+		} else {
+			_XPPM._PARTS_PLAYERMAIN._control_stop_shots();
+			_XPPM._PARTS_PLAYERMAIN._control_stop_missile_shots();
+		}
 	},
 	_keyup_sp_bts(e){
 		//ボタン用、touchend表示定義

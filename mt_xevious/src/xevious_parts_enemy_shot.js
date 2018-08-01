@@ -10,15 +10,19 @@ import * as _XMP from './xevious_map';
 
 export const _PARTS_ENEMYSHOT={
 	_difficult:0,
+	_speed:1,
 	_enemyshot:new Array(),
 	_init(_num){
 		this._difficult=_num;
+		this._speed = _GAME_COMMON._getDifficult(_num)._shot_speed;
+		this._rate = _GAME_COMMON._getDifficult(_num)._shot_rate;
 	},
 	_reset(){
 		let _this = this;
 		_this._enemyshot = new Array();
 	},
 	_set_enemyshot(_e){
+		let _this = this;
 		let _o = _XPPM._PARTS_PLAYERMAIN._get_players_location();
 		if(_o===undefined){return;}
 		let _x=_o.x;
@@ -30,22 +34,26 @@ export const _PARTS_ENEMYSHOT={
 				x: _e.getEnemyCenterPosition()._x,
 				y: _e.getEnemyCenterPosition()._y,
 				tx: _x,
-				ty: _y
+				ty: _y,
+				speed: _this._speed
 			}
 		))
 	},
 	_set_enemyshot2(_e){
+		let _this = this;
 		let _o = _XPPM._PARTS_PLAYERMAIN._get_players_location();
 		if(_o===undefined){return;}
 		let _x=_o.x;
 		let _y=_o.y;
 		if(_x===undefined||_y===undefined){return;}
+		if(_this._rate<_Math.random()){return;}
 		this._enemyshot.push(new GameObject_ENEMYSHOT(
 			{
 				x: _e.x,
 				y: _e.y,
 				tx: _x,
-				ty: _y
+				ty: _y,
+				speed: _this._speed
 			}
 		))
 	},
@@ -94,7 +102,7 @@ class GameObject_ENEMYSHOT{
 		_this.aniItv=_p.aniItv||5;//アニメーション間隔
 		_this.basePoint=_p.basePoint||1;
 
-		_this.speed = _PARTS_ENEMYSHOT._difficult+3; //定義：発射スピード
+		_this.speed = (_p.speed||0)+3; //定義：発射スピード
 		_this.rad=_p.rad||Math.atan2((_this.ty-_this.y),(_this.tx-_this.x));//ラジアン
 		_this.sx=Math.cos(_this.rad);//単位x
 		_this.sy=Math.sin(_this.rad);//単位y

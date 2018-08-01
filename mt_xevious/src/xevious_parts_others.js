@@ -9,10 +9,11 @@ import * as _XC from './xevious_canvasimgs';
 import * as _XMP from './xevious_map';
 
 export const _PARTS_OTHERS = {
-	_score:new Object(),
+	_score:null,
 	_reset(){
 		let _this = this;
-		_this._score = new xevious_score();
+		_this._score.reset();
+//		_this._score = new xevious_score();
 	},
 	_set_score(_score){
 		this._score.set(_score);
@@ -25,7 +26,9 @@ export const _PARTS_OTHERS = {
 	//=============================
 	_init_others_obj() {
 		let _this = this;
-		_this._score = new xevious_score();
+		if(_this._score===null){
+			_this._score = new xevious_score();
+		}
 	}
 };
 
@@ -84,6 +87,11 @@ export class xevious_score{
 		_this.score1p = 0;
 		_this.score2p = 0;
 		_this.scorehi = _this.def_scorehi;
+	}
+	reset(){
+		let _this = this;
+		_this.score1p = 0;
+		_this.score2p = 0;
 	}
 	set(_score) {
 		let _this=this;
