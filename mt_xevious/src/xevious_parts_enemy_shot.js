@@ -29,6 +29,7 @@ export const _PARTS_ENEMYSHOT={
 		let _y=_o.y;
 		if(_x===undefined||_y===undefined){return;}
 		if(_e.getEnemyCenterPosition()._y>_y){return;}
+		if (Math.sqrt(Math.pow(_e.getEnemyCenterPosition()._y - _y)+Math.pow(_e.getEnemyCenterPosition()._x - _x))<=50){return;}
 		this._enemyshot.push(new GameObject_ENEMYSHOT(
 			{
 				x: _e.getEnemyCenterPosition()._x,
@@ -46,6 +47,7 @@ export const _PARTS_ENEMYSHOT={
 		let _x=_o.x;
 		let _y=_o.y;
 		if(_x===undefined||_y===undefined){return;}
+		if (Math.sqrt(Math.pow(_e.getEnemyCenterPosition()._y - _y)+Math.pow(_e.getEnemyCenterPosition()._x - _x))<=50){return;}
 		if(_this._rate<_Math.random()){return;}
 		this._enemyshot.push(new GameObject_ENEMYSHOT(
 			{

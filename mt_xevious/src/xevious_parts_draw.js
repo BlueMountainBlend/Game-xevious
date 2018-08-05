@@ -17,7 +17,7 @@ let _DRAW_SETINTERVAL = null;
 let _DRAW_OBJ_BACKGROUND = new Object();
 
 let _FLAG_GAMEOVER = false;
-let _COUNT_GAMEOVER = false;
+let _COUNT_GAMEOVER = 0;
 
 let _DRAW_START_SOUND = true;
 let _start_select = 0;
@@ -100,8 +100,11 @@ export const _DRAW = () => {
 export const _DRAW_GAMECLEAR = () => {
 	if(!_XPE._PARTS_ENEMIESMAIN._get_enemies()){return;}
 	if (_IS_GAMEOVER()){return;}
+	_XCE._KEYEVENT_MASTER.addKeydownGameclear();
+
 	_GAME_COMMON._setDrawText('GAME CLEAR', 'center', 300, 0.5);
 	_GAME_COMMON._setDrawText('PRESS R TO RESTART', 'center', 400, 0.3);
+	_GAME_COMMON._setDrawText('PRESS S TO BACK TO OPENING',"center",(_GAME_COMMON._canvas.height / 2) + 80,0.25);
 }
 export const _DRAW_GAMESTART = () =>{
 //	console.log(_start_select)
@@ -184,6 +187,7 @@ export const _DRAW_PLAYER_COLLAPES = () => {
 	// _e.setDrawImage();
 	_XPPM._PARTS_PLAYERMAIN._draw_collision();
 	if (_IS_GAMEOVER()) {
+		if(_COUNT_GAMEOVER===0){_GAME_COMMON._setStopOnBG();};
 		if(_COUNT_GAMEOVER>=100){_DRAW_GAMEOVER();}
 		_COUNT_GAMEOVER=(_COUNT_GAMEOVER>=100)?100:_COUNT_GAMEOVER+1;
 	}
@@ -278,7 +282,7 @@ const _DRAW_GAMEOVER=()=>{
 		0.25);
 
 	_GAME_COMMON._setDrawText(
-		'PRESS S TO BACK TO OPNING',
+		'PRESS S TO BACK TO OPENING',
 		"center",
 		(_GAME_COMMON._canvas.height / 2) + 60,
 		0.25);

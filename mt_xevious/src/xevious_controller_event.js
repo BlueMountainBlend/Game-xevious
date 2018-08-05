@@ -436,12 +436,7 @@ export const _KEYEVENT_SP = {
 	return false;
 },//keydown_gameclear_s
 'keydown_gameclear_p':function(e){
-	if(_DRAW_SETINTERVAL!==null){
-		_DRAW_STOP();
-	}else{
-		_DRAW();
-	}
-	return false;
+	_XPD._DRAW_SWITCH();
 },//keydown_gameclear_p
 
 //=========================
