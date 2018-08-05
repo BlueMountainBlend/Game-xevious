@@ -1,1 +1,102 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title>HTML 5 Xevious no pakuri</title><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="apple-mobile-web-app-title" content="Xevious"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="apple-touch-icon" href="images/homeicon.jpg"></head><body style="display: none"><section id="game_wrapper"><canvas width="510" height="720" id="game"></canvas></section><section id="game_start_loading"><div class="text">Now Loading...<p class="rate"></p></div><div class="range"></div></section><section id="sp_controller"><div id="sp_controller_inner"><div class="sp_controller_main"><div class="sp_controller_main_center"></div></div><div class="sp_controller_bt r"></div><div class="sp_controller_bt p"></div><div class="sp_controller_bt s"></div><div class="sp_controller_bt b"></div><div class="sp_controller_bt a"></div><div class="sp_controller_bt auto"></div></div></section><section id="sp_portraitmode"><div class="_inner">画面を縦にして<br>ゲームをしてください<div id="device"></div></div></section><script src="./xevious_main.js?_date=1533135027739"></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga'); ga('create', 'UA-117905768-2', 'auto'); ga('send', 'pageview');</script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>HTML 5 Xevious no pakuri</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<meta name="apple-mobile-web-app-title" content="Xevious">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<link rel="apple-touch-icon" href="./images/homeicon.jpg">
+</head>
+<body style="display:none;">
+
+
+<section id="game_wrapper">
+<canvas id="game" width="510" height="720"></canvas>
+</section>
+<section id="game_start_loading">
+<div class="text">Now Loading...
+<p class="rate"></p>
+</div>
+<div class="range"></div>
+</section>
+
+<section id="sp_controller">
+<div id="sp_controller_inner">
+
+<div class="sp_controller_main">
+<div class="sp_controller_main_center"></div>
+</div>
+<!-- /.sp_controller_main -->
+
+<div class="sp_controller_bt r"></div>
+<div class="sp_controller_bt p"></div>
+<div class="sp_controller_bt s"></div>
+<div class="sp_controller_bt b"></div>
+<div class="sp_controller_bt a"></div>
+<div class="sp_controller_bt auto"></div>
+</div>
+</section>
+<!-- /#sp_controller -->
+
+<section id="sp_portraitmode">
+<div class="_inner">画面を縦にして
+<br>ゲームをしてください
+<div id="device"></div>
+</div><!-- /._inner -->
+</section>
+<!-- /#sp_portraitmode -->
+
+<!-- <input type="text" id="msg_input" style="width:200px;" />
+<button>語る</button>
+<div id="msg"></div> -->
+
+
+<!-- <script src="/socket.io/socket.io.js"></script> -->
+<script>
+//  var socketio = io.connect('http://localhost:1234');
+// // socketio = io({ path: '/public/git/Game_xevious/mt_xevious/socket.io/' });
+//      socketio.on("connected", function (name) {});
+//     socketio.on("publish", function (data) {
+//         addMessage(data.value);
+//     });
+//     socketio.on("disconnect", function () {});
+
+//     // 2.イベントに絡ませる関数の定義
+//     function start(name) {
+//         socketio.emit("connected", name);
+//     }
+
+//     function publishMessage() {
+//         var textInput = document.getElementById('msg_input');
+//         var msg = "[" + myName + "] " + textInput.value;
+//         socketio.emit("publish", {
+//             value: msg
+//         });
+//         textInput.value = '';
+//     }
+
+//     function addMessage(msg) {
+//         var domMeg = document.createElement('div');
+//         domMeg.innerHTML = new Date().toLocaleTimeString() + ' ' + msg;
+//         msgArea.appendChild(domMeg);
+//     }
+
+//     // 3.開始処理
+//     var msgArea = document.getElementById("msg");
+//     var myName = Math.floor(Math.random() * 100) + "さん";
+//     addMessage("貴方は" + myName + "として入室しました");
+//     start(myName);
+</script>
+<script src="./xevious_main.js?date=201806012"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
+Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-117905768-2', 'auto'); ga('send', 'pageview');
+</script>
+<script type="text/javascript" src="xevious_main.js"></script></body>
+</html>

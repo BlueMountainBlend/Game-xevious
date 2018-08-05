@@ -436,12 +436,7 @@ export const _KEYEVENT_SP = {
 	return false;
 },//keydown_gameclear_s
 'keydown_gameclear_p':function(e){
-	if(_DRAW_SETINTERVAL!==null){
-		_DRAW_STOP();
-	}else{
-		_DRAW();
-	}
-	return false;
+	_XPD._DRAW_SWITCH();
 },//keydown_gameclear_p
 
 //=========================
@@ -614,18 +609,21 @@ export const _SP_CONTROLLER = {
 	},
 	_keydown_sp_bts(e){
 		//ボタン用、touchdown表示定義
-		e.stopPropagation();
-		e.preventDefault();
-
+console.log('test')
 		if (e.target.classList.value.indexOf('auto') !== -1) {
 			if (e.target.classList.value.indexOf('auto on') !== -1){
 				e.currentTarget.classList.remove('on');
 			}else{
 				e.currentTarget.classList.add('on');
 			}
-			return;
+			e.stopPropagation();
+			e.preventDefault();
+			return false;
 		}
 		e.currentTarget.classList.add('on');
+		e.stopPropagation();
+		e.preventDefault();
+		return false;
 	},
 	_keydown_sp_auto(){
 		if (_SP_CONTROLLER._is_auto()) {

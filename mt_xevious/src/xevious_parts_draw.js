@@ -100,8 +100,11 @@ export const _DRAW = () => {
 export const _DRAW_GAMECLEAR = () => {
 	if(!_XPE._PARTS_ENEMIESMAIN._get_enemies()){return;}
 	if (_IS_GAMEOVER()){return;}
+	_XCE._KEYEVENT_MASTER.addKeydownGameclear();
+
 	_GAME_COMMON._setDrawText('GAME CLEAR', 'center', 300, 0.5);
 	_GAME_COMMON._setDrawText('PRESS R TO RESTART', 'center', 400, 0.3);
+	_GAME_COMMON._setDrawText('PRESS S TO BACK TO OPENING',"center",(_GAME_COMMON._canvas.height / 2) + 80,0.25);
 }
 export const _DRAW_GAMESTART = () =>{
 //	console.log(_start_select)
@@ -278,7 +281,7 @@ const _DRAW_GAMEOVER=()=>{
 		0.25);
 
 	_GAME_COMMON._setDrawText(
-		'PRESS S TO BACK TO OPNING',
+		'PRESS S TO BACK TO OPENING',
 		"center",
 		(_GAME_COMMON._canvas.height / 2) + 60,
 		0.25);
