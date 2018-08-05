@@ -17,7 +17,7 @@ let _DRAW_SETINTERVAL = null;
 let _DRAW_OBJ_BACKGROUND = new Object();
 
 let _FLAG_GAMEOVER = false;
-let _COUNT_GAMEOVER = false;
+let _COUNT_GAMEOVER = 0;
 
 let _DRAW_START_SOUND = true;
 let _start_select = 0;
@@ -187,6 +187,7 @@ export const _DRAW_PLAYER_COLLAPES = () => {
 	// _e.setDrawImage();
 	_XPPM._PARTS_PLAYERMAIN._draw_collision();
 	if (_IS_GAMEOVER()) {
+		if(_COUNT_GAMEOVER===0){_GAME_COMMON._setStopOnBG();};
 		if(_COUNT_GAMEOVER>=100){_DRAW_GAMEOVER();}
 		_COUNT_GAMEOVER=(_COUNT_GAMEOVER>=100)?100:_COUNT_GAMEOVER+1;
 	}
