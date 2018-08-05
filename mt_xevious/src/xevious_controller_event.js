@@ -609,21 +609,18 @@ export const _SP_CONTROLLER = {
 	},
 	_keydown_sp_bts(e){
 		//ボタン用、touchdown表示定義
-console.log('test')
+		e.stopPropagation();
+		e.preventDefault();
+
 		if (e.target.classList.value.indexOf('auto') !== -1) {
 			if (e.target.classList.value.indexOf('auto on') !== -1){
 				e.currentTarget.classList.remove('on');
 			}else{
 				e.currentTarget.classList.add('on');
 			}
-			e.stopPropagation();
-			e.preventDefault();
-			return false;
+			return;
 		}
 		e.currentTarget.classList.add('on');
-		e.stopPropagation();
-		e.preventDefault();
-		return false;
 	},
 	_keydown_sp_auto(){
 		if (_SP_CONTROLLER._is_auto()) {
